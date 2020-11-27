@@ -1,5 +1,6 @@
+/* eslint-disable no-unused-vars */
 import {
-  Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, ManyToMany,
+  Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToMany,
 } from 'typeorm';
 import Provider from './Provider';
 
@@ -23,7 +24,7 @@ class Patient {
   @CreateDateColumn()
   createdAt: Date;
 
-  @CreateDateColumn()
+  @UpdateDateColumn()
   updatedAt: Date;
 
   @ManyToMany(() => Provider, (providers) => providers.patients)

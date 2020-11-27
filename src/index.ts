@@ -3,7 +3,9 @@ import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import { resolve } from 'path';
-import { createConnection, Connection } from 'typeorm';
+import { createConnection, Connection, getConnection } from 'typeorm';
+import Patient from './entities/Patient';
+import Provider from './entities/Provider';
 
 dotenv.config({ path: resolve(__dirname, '../.env') });
 
@@ -29,7 +31,19 @@ app.get('/', () => console.log('hello world'));
       username: 'postgres',
       password: process.env.DB_PASSWORD,
       database: 'medicalapp',
+      entities: [Patient, Provider],
+      synchronize: true,
     });
+    await getConnection()
+      .createQueryBuilder()
+      .insert()
+      .into(Patient)
+      .values({
+        DoB: 'test',
+        name: 'test',
+        sex: 0,
+      })
+      .execute();
     app.listen(process.env.PORT, () => {
       console.log(`Server is up and listening on port ${process.env.PORT}.`);
     });

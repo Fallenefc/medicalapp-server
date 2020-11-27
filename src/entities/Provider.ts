@@ -1,5 +1,6 @@
+/* eslint-disable no-unused-vars */
 import {
-  Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, ManyToMany, JoinTable,
+  Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToMany, JoinTable,
 } from 'typeorm';
 import Patient from './Patient';
 
@@ -28,16 +29,12 @@ class Provider {
   @CreateDateColumn()
   createdAt: Date;
 
-  @CreateDateColumn()
+  @UpdateDateColumn()
   updatedAt: Date;
 
   @ManyToMany(() => Patient, (patient) => patient.providers)
   @JoinTable()
   patients: Patient[];
-
-  // Have to create a patients relation
-
-  // @ManyToMany() This many to many will link providers to patients
 }
 
 export default Provider;
