@@ -3,7 +3,8 @@ import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import { resolve } from 'path';
-import { createConnection, Connection, getConnection } from 'typeorm';
+import { createConnection, Connection } from 'typeorm';
+import bodyParser from 'body-parser';
 import Patient from './entities/Patient';
 import Provider from './entities/Provider';
 import router from './routes';
@@ -17,7 +18,7 @@ const corsConfig = {
   credentials: true,
 };
 
-app.use(express.json());
+app.use(bodyParser.json());
 app.use(cors(corsConfig));
 app.use(router);
 
@@ -36,16 +37,6 @@ app.get('/', () => console.log('hello world'));
       entities: [Patient, Provider],
       synchronize: true,
     });
-    await getConnection()
-      .createQueryBuilder()
-      .insert()
-      .into(Patient)
-      .values({
-        DoB: 'test',
-        name: 'test',
-        sex: 0,
-      })
-      .execute();
     app.listen(process.env.PORT, () => {
       console.log(`Server is up and listening on port ${process.env.PORT}.`);
     });

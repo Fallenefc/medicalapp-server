@@ -11,7 +11,6 @@ class PatientResolvers {
         .select('patient')
         .from(Patient, 'patient')
         .getMany();
-      console.log(patients);
       return res.status(200).send(patients);
     } catch (err) {
       console.error(`Something is wrong getting patients ${err}`);
