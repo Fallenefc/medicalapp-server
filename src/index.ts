@@ -6,6 +6,7 @@ import { resolve } from 'path';
 import { createConnection, Connection, getConnection } from 'typeorm';
 import Patient from './entities/Patient';
 import Provider from './entities/Provider';
+import router from './routes';
 
 dotenv.config({ path: resolve(__dirname, '../.env') });
 
@@ -18,6 +19,7 @@ const corsConfig = {
 
 app.use(express.json());
 app.use(cors(corsConfig));
+app.use(router);
 
 app.get('/', () => console.log('hello world'));
 

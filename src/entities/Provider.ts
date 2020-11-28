@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import {
   Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToMany, JoinTable,
 } from 'typeorm';
@@ -12,7 +11,7 @@ import Patient from './Patient';
 })
 class Provider {
   @PrimaryGeneratedColumn('uuid')
-  id: number;
+  id: string;
 
   @Column({ unique: true })
   email: string;
