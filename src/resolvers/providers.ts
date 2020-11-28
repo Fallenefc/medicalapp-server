@@ -5,6 +5,7 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { v4 } from 'uuid';
 import Provider from '../entities/Provider';
+import sendEmail from '../utils/emailSend';
 
 interface AuthRequest extends Request {
   user?: any,
@@ -114,10 +115,30 @@ class ProvidersResolvers {
         .set({ resetPassword: token })
         .where('email = :email', { email: req.body.email })
         .execute();
+      sendEmail('arylmoraesn@hotmail.com', 'test');
       res.status(200);
       res.send({ token });
     } catch (err) {
-      console.error(`Something is reseting password: ${err}`);
+      console.error(`Something is wrong forgot password: ${err}`);
+      res.sendStatus(403);
+    }
+  }
+
+  async resetPassword(req: Request, res: Response) {
+    try {
+      const { token, password } = req.body;
+      const provider = await getConnection()
+        .createQueryBuilder()
+        .update(Provider)
+        .set({ password })
+        .where('resetPassword = :resetPassword', { resetPassword: token })
+        .set({ resetPassword: '' })
+        .execute();
+      res.status(200);
+      res.send(provider);
+    } catch (err) {
+      console.error(`Something is wrong with resetting password: ${err}`);
+      res.sendStatus(403);
     }
   }
 }

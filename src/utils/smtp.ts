@@ -1,4 +1,7 @@
-import { GMAIL_PASSWORD, GMAIL } from '../tempFixSecretForNow';
+// import { GMAIL_PASSWORD, GMAIL } from '../tempFixSecretForNow';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 interface Auth {
   user: string,
@@ -17,8 +20,8 @@ const smptConfig: SmptConfig = {
   port: 465,
   secure: true,
   auth: {
-    user: GMAIL,
-    pass: GMAIL_PASSWORD,
+    user: process.env.GMAIL,
+    pass: process.env.GMAIL_PASSWORD,
   },
 };
 

@@ -2,7 +2,7 @@ import 'reflect-metadata';
 import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
-import { resolve } from 'path';
+// import { resolve } from 'path';
 import { createConnection, Connection } from 'typeorm';
 import bodyParser from 'body-parser';
 import Patient from './entities/Patient';
@@ -10,7 +10,8 @@ import Provider from './entities/Provider';
 import router from './routes';
 import sendEmail from './utils/emailSend';
 
-dotenv.config({ path: resolve(__dirname, '../.env') });
+// dotenv.config({ path: resolve(__dirname, '../.env') });
+dotenv.config();
 
 const app = express();
 
