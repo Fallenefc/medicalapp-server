@@ -3,6 +3,7 @@ import { getConnection } from 'typeorm';
 import { Request, Response } from 'express';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import { v4 } from 'uuid';
 import Provider from '../entities/Provider';
 
 interface AuthRequest extends Request {
@@ -31,6 +32,7 @@ class ProvidersResolvers {
             password: hashedPass,
             name,
             title,
+            resetPassword: '',
           })
           .execute();
         console.log(`Added to database: ${JSON.stringify(provider)}`);
@@ -93,6 +95,29 @@ class ProvidersResolvers {
     } catch (err) {
       console.error(`Something is wrong profile: ${err}`);
       res.sendStatus(403);
+    }
+  }
+
+  async forgotPassword(req: Request, res: Response) {
+    try {
+      const provider = await getConnection()
+        .createQueryBuilder()
+        .select('provider')
+        .from(Provider, 'provider')
+        .where('provider.email = :email', { email: req.body.email })
+        .getOne();
+      if (!provider) throw new Error('Provider not found');
+      const token = v4();
+      await getConnection()
+        .createQueryBuilder()
+        .update(Provider)
+        .set({ resetPassword: token })
+        .where('email = :email', { email: req.body.email })
+        .execute();
+      res.status(200);
+      res.send({ token });
+    } catch (err) {
+      console.error(`Something is reseting password: ${err}`);
     }
   }
 }

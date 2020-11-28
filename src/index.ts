@@ -8,6 +8,7 @@ import bodyParser from 'body-parser';
 import Patient from './entities/Patient';
 import Provider from './entities/Provider';
 import router from './routes';
+import sendEmail from './utils/emailSend';
 
 dotenv.config({ path: resolve(__dirname, '../.env') });
 
@@ -22,7 +23,7 @@ app.use(bodyParser.json());
 app.use(cors(corsConfig));
 app.use(router);
 
-app.get('/', () => console.log('hello world'));
+app.get('/', () => sendEmail('arylmoraesn@gmail.com', 'test content'));
 
 (async () => {
   try {

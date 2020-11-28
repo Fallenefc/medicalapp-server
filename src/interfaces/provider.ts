@@ -10,5 +10,6 @@ export interface ProviderRaw {
 
 export interface Provider extends ProviderRaw {
   uid: number,
+  resetPassword: string,
   createdAt: string // should it really be string?
 }

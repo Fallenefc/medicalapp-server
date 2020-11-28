@@ -25,6 +25,9 @@ class Provider {
   @Column()
   title: string;
 
+  @Column()
+  resetPassword: string;
+
   @CreateDateColumn()
   createdAt: Date;
 
