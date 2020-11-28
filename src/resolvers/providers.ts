@@ -2,6 +2,7 @@
 import { getConnection } from 'typeorm';
 import { Request, Response } from 'express';
 import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
 import Provider from '../entities/Provider';
 
 class ProvidersResolvers {
@@ -41,6 +42,37 @@ class ProvidersResolvers {
     } catch (err) {
       console.error(`Something is wrong signing up: ${err}`);
       res.status(403);
+    }
+  }
+
+  async login(req: Request, res: Response) {
+    const { email, password } = req.body;
+
+    try {
+      const provider = await getConnection()
+        .createQueryBuilder()
+        .select('provider')
+        .from(Provider, 'provider')
+        .where('provider.email = :email', { email })
+        .getOne();
+      if (!provider) throw new Error('User does not exist');
+      const isValid = await bcrypt.compare(password, provider.password);
+      if (!isValid) throw new Error('Passwords do not match');
+
+      return res.status(200).json({
+        user: {
+          id: provider.id,
+          email: provider.email,
+        },
+        token: jwt.sign({ id: provider.id }, process.env.SECRET_KEY, {
+          expiresIn: 86400,
+        }),
+      });
+    } catch (err) {
+      console.error(`Something is wrong login: ${err}`);
+      return res.status(403).send({
+        error: 'Forbidden',
+      });
     }
   }
 }

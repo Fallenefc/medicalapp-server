@@ -12,7 +12,7 @@ router.get('/patients', PatientControllers.getPatients);
 
 // Login and Signup
 router.post('/signup', ProviderControllers.register);
-// router.post('/login', userLogIn);
+router.post('/login', ProviderControllers.login);
 // router.get('/me', authMiddleware, getUserInfo);
 
 export default router;

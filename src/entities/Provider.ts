@@ -4,7 +4,7 @@ import {
 import Patient from './Patient';
 
 @Entity({
-  name: 'providers',
+  name: 'provider',
   orderBy: {
     name: 'ASC',
   },
