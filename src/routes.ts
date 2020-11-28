@@ -1,4 +1,5 @@
 import express from 'express';
+import authMiddleware from './middleware/auth';
 import PatientResolvers from './resolvers/patients';
 import ProvidersResolvers from './resolvers/providers';
 
@@ -13,6 +14,6 @@ router.get('/patients', PatientControllers.getPatients);
 // Login and Signup
 router.post('/signup', ProviderControllers.register);
 router.post('/login', ProviderControllers.login);
-// router.get('/me', authMiddleware, getUserInfo);
+router.get('/me', authMiddleware, ProviderControllers.profile);
 
 export default router;

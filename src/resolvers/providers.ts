@@ -5,6 +5,10 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import Provider from '../entities/Provider';
 
+interface AuthRequest extends Request {
+  user?: any,
+}
+
 class ProvidersResolvers {
   async register(req: Request, res: Response) {
     try {
@@ -73,6 +77,22 @@ class ProvidersResolvers {
       return res.status(403).send({
         error: 'Forbidden',
       });
+    }
+  }
+
+  async profile(req: AuthRequest, res: Response) {
+    try {
+      const data = req.user;
+      res.status(200);
+      res.send({
+        email: data.email,
+        name: data.name,
+        id: data.id,
+        title: data.title,
+      });
+    } catch (err) {
+      console.error(`Something is wrong profile: ${err}`);
+      res.sendStatus(403);
     }
   }
 }
