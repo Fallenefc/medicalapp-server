@@ -5,8 +5,6 @@ const sendEmail = async (receiver: string, content: string) => {
   try {
     const transporter = nodemailer.createTransport(smptConfig);
 
-    console.log(smptConfig);
-
     const info = await transporter.sendMail({
       from: '"Bloodworks" <bloodworksapp@gmail.com>',
       to: receiver,

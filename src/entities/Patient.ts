@@ -1,7 +1,8 @@
 import {
-  Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToMany,
+  Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToMany, OneToMany,
 } from 'typeorm';
 import Provider from './Provider';
+import Event from './Event';
 
 @Entity()
 class Patient {
@@ -28,6 +29,9 @@ class Patient {
 
   @ManyToMany(() => Provider, (provider) => provider.patients)
   providers: Provider[];
+
+  @OneToMany(() => Event, (event) => event.patient)
+  event: Event[];
 }
 
 export default Patient;

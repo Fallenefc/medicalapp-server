@@ -1,7 +1,9 @@
 import {
-  Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToMany, JoinTable,
+  Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn,
+  ManyToMany, JoinTable, OneToMany,
 } from 'typeorm';
 import Patient from './Patient';
+import Event from './Event';
 
 @Entity({
   name: 'provider',
@@ -37,6 +39,9 @@ class Provider {
   @ManyToMany(() => Patient, (patient) => patient.providers)
   @JoinTable()
   patients: Patient[];
+
+  @OneToMany(() => Event, (event) => event.provider)
+  event: Event[];
 }
 
 export default Provider;
