@@ -33,6 +33,6 @@ router.post('/measurement', MeasurementControllers.createEvent);
 
 // USE THE FOLLOWING ROUTE ONLY ONCE TO POPULATE YOUR MEASUREMENTS TABLE!!
 // REMOVE THIS IN PRODUCTION
-// router.post('/populateMeasurements', MeasurementControllers.populateData);
+router.post('/populateMeasurements', MeasurementControllers.populateData);
 
 export default router;

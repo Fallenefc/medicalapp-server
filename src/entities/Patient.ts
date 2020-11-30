@@ -23,7 +23,7 @@ class Patient extends BaseEntity {
   @Column()
   lastName: string;
 
-  @Column()
+  @Column({ default: null })
   email: string;
 
   @Column({ default: null })

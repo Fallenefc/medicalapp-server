@@ -12,8 +12,9 @@ class Event extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
+  // Change back to date, this is just for testing
   @Column()
-  date: Date;
+  date: string;
 
   @Column({ type: 'float' })
   measurementValue: number;

@@ -3,13 +3,15 @@ import {
 } from 'typeorm';
 import Event from './Event';
 
+//
+
 @Entity()
 class Measurement extends BaseEntity {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
-
-  @Column()
+  @PrimaryGeneratedColumn()
   name: string;
+
+  @Column('uuid')
+  id: string;
 
   @Column({ type: 'float' })
   minValue: number;
