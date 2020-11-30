@@ -1,5 +1,5 @@
 /* eslint-disable class-methods-use-this */
-import { createQueryBuilder, getConnection } from 'typeorm';
+import { getConnection } from 'typeorm';
 import { Response } from 'express';
 import Patient from '../entities/Patient';
 import { AuthRequest } from './providers';
@@ -49,7 +49,7 @@ class PatientResolvers {
         .getMany();
       res.status(200).send(patients);
     } catch (err) {
-      console.error('whatever');
+      res.status(400).send(`Problem fetching patient data ${err}`);
     }
   }
 }

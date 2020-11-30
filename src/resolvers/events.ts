@@ -35,6 +35,18 @@ class EventResolvers {
       return res.status(400);
     }
   }
+
+  async patientGetAllEvents(req: AuthRequest, res: Response) {
+    try {
+      // TODO: Make a check if the provider actually has the patient as his patient
+      const { patientId } = req.params;
+      const patientEvents = await Event.find({ where: { patient: patientId } });
+      return res.status(200).send(patientEvents);
+    } catch (err) {
+      console.error(`error: ${err}`);
+      return res.status(400);
+    }
+  }
 }
 
 export default EventResolvers;
