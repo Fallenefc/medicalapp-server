@@ -8,7 +8,6 @@ import bodyParser from 'body-parser';
 import Patient from './entities/Patient';
 import Provider from './entities/Provider';
 import router from './routes';
-import sendEmail from './utils/emailSend';
 
 // dotenv.config({ path: resolve(__dirname, '../.env') });
 dotenv.config();
@@ -24,7 +23,7 @@ app.use(bodyParser.json());
 app.use(cors(corsConfig));
 app.use(router);
 
-app.get('/', () => sendEmail('arylmoraesn@gmail.com', 'test content'));
+// app.get('/', () => sendEmail('arylmoraesn@gmail.com', 'test content'));
 
 (async () => {
   try {
@@ -37,7 +36,7 @@ app.get('/', () => sendEmail('arylmoraesn@gmail.com', 'test content'));
       password: process.env.DB_PASSWORD,
       database: 'medicalapp',
       entities: [Patient, Provider],
-      synchronize: true,
+      synchronize: true, // DO NOT USE FOR PRODUCTION! USE MIGRATIONS INSTEAD
     });
     app.listen(process.env.PORT, () => {
       console.log(`Server is up and listening on port ${process.env.PORT}.`);

@@ -115,7 +115,8 @@ class ProvidersResolvers {
         .set({ resetPassword: token })
         .where('email = :email', { email: req.body.email })
         .execute();
-      sendEmail('arylmoraesn@hotmail.com', 'test');
+      // TODO: On the next line, change the hard coded string address to the front-end URL
+      sendEmail(req.body.email, `http://localhost:3000/resetPassword/${token}`);
       res.status(200);
       res.send({ token });
     } catch (err) {
@@ -127,15 +128,18 @@ class ProvidersResolvers {
   async resetPassword(req: Request, res: Response) {
     try {
       const { token, password } = req.body;
-      const provider = await getConnection()
-        .createQueryBuilder()
-        .update(Provider)
-        .set({ password })
-        .where('resetPassword = :resetPassword', { resetPassword: token })
-        .set({ resetPassword: '' })
-        .execute();
-      res.status(200);
-      res.send(provider);
+      bcrypt.hash(password, 10, async (err, hashedPass) => {
+        if (err) throw new Error();
+        const provider = await getConnection()
+          .createQueryBuilder()
+          .update(Provider)
+          .set({ password: hashedPass })
+          .where('resetPassword = :resetPassword', { resetPassword: token })
+          .set({ resetPassword: '' })
+          .execute();
+        res.status(200);
+        res.send(provider);
+      });
     } catch (err) {
       console.error(`Something is wrong with resetting password: ${err}`);
       res.sendStatus(403);

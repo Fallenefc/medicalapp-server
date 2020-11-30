@@ -8,7 +8,7 @@ export interface ProviderRaw {
   patients: Patient[],
 }
 
-export interface Provider extends ProviderRaw {
+export interface ProviderInterface extends ProviderRaw {
   uid: number,
   resetPassword: string,
   createdAt: string // should it really be string?
