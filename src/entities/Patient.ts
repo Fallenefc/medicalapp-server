@@ -4,6 +4,7 @@ import {
 } from 'typeorm';
 import Provider from './Provider';
 import Event from './Event';
+import Warning from './Warning';
 
 @Entity()
 class Patient extends BaseEntity {
@@ -21,6 +22,9 @@ class Patient extends BaseEntity {
 
   @Column()
   lastName: string;
+
+  @Column()
+  email: string;
 
   @Column({ default: null })
   DoB: string | null;
@@ -45,6 +49,9 @@ class Patient extends BaseEntity {
 
   @OneToMany(() => Event, (event) => event.patient)
   event: Event[];
+
+  @OneToMany(() => Warning, (warning) => warning.patient)
+  warning: Warning[];
 }
 
 export default Patient;

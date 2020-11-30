@@ -23,28 +23,30 @@ class PatientResolvers {
   async addPatient(req: AuthRequest, res: Response) {
     try {
       const {
-        uniqueId, title, firstName, lastName, DoB, sex, gender,
+        uniqueId, title, firstName, lastName, DoB, sex, gender, email,
       } = req.body;
-      const creatingProvider: any = await Provider.findOne(req.user.id);
-      console.log(creatingProvider);
+      const linkedProvider: any = await Provider.findOne(req.user.id);
       const patient: Patient = await Patient.create({
         uniqueId,
         title,
         firstName,
         lastName,
+        email,
         DoB,
         sex,
         gender,
         height: null,
-        providers: [creatingProvider.id],
       })
         .save();
       await getConnection()
         .createQueryBuilder()
         .relation(Provider, 'patients')
-        .of(creatingProvider)
+        .of(linkedProvider)
         .add(patient);
-      res.status(200).send(patient);
+      res.status(200).send({
+        ...patient,
+        provider: linkedProvider.id,
+      });
     } catch (err) {
       res.status(400).send(`Problem adding patient ${err}`);
     }
