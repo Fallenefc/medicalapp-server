@@ -16,12 +16,22 @@ class EventResolvers {
         measurementValue,
         measurement: measurementName,
         patient: patientId,
-        provider: provider.id,
+        providerId: provider.id,
       })
         .save();
       return res.status(200).send(event);
     } catch (err) {
       console.error(`Something is wrong ghen creatingetting patients ${err}`);
+      return res.status(400);
+    }
+  }
+
+  async getAllProviderEvents(req: AuthRequest, res: Response) {
+    try {
+      const events = await Event.find({ where: { providerId: req.user.id } });
+      return res.status(200).send(events);
+    } catch (err) {
+      console.error(`error: ${err}`);
       return res.status(400);
     }
   }

@@ -29,7 +29,7 @@ class Event extends BaseEntity {
   measurement: Measurement;
 
   @ManyToOne(() => Provider, (provider: Provider) => provider.event)
-  provider: Provider;
+  providerId: Provider;
 
   @ManyToOne(() => Patient, (patient: Patient) => patient.event)
   patient: Patient;

@@ -7,11 +7,11 @@ import Event from './Event';
 
 @Entity()
 class Measurement extends BaseEntity {
-  @PrimaryGeneratedColumn()
-  name: string;
-
-  @Column('uuid')
+  @PrimaryGeneratedColumn('uuid')
   id: string;
+
+  @Column()
+  name: string;
 
   @Column({ type: 'float' })
   minValue: number;

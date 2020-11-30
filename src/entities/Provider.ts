@@ -40,7 +40,7 @@ class Provider extends BaseEntity {
   @JoinTable({ name: 'patient-provider' })
   patients: Patient[];
 
-  @OneToMany(() => Event, (event) => event.provider)
+  @OneToMany(() => Event, (event) => event.providerId)
   event: Event[];
 }
 

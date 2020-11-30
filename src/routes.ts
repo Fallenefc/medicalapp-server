@@ -12,9 +12,6 @@ const ProviderControllers = new ProvidersResolvers();
 const MeasurementControllers = new MeasurementResolver();
 const EventControllers = new EventResolvers();
 
-// fetch all patients
-router.get('/patients', PatientControllers.getPatients);
-
 // Login and Signup
 router.post('/signup', ProviderControllers.register);
 router.post('/login', ProviderControllers.login);
@@ -24,9 +21,17 @@ router.post('/resetPassword', ProviderControllers.resetPassword);
 
 // Patient Routes
 router.post('/patients', authMiddleware, PatientControllers.addPatient);
+router.get('/patients', authMiddleware, PatientControllers.getAllPatients);
 
 // Event Routes
 router.post('/event', authMiddleware, EventControllers.createEvent);
+router.get('/event', authMiddleware, EventControllers.getAllProviderEvents);
+
+//
+//
+// DEVELOPMENT ROUTES
+//
+//
 
 // Measurement Route (this is just for development)
 router.post('/measurement', MeasurementControllers.createEvent);

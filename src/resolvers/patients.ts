@@ -1,25 +1,11 @@
 /* eslint-disable class-methods-use-this */
-import { getConnection } from 'typeorm';
-import { Request, Response } from 'express';
+import { createQueryBuilder, getConnection } from 'typeorm';
+import { Response } from 'express';
 import Patient from '../entities/Patient';
 import { AuthRequest } from './providers';
 import Provider from '../entities/Provider';
 
 class PatientResolvers {
-  async getPatients(_: Request, res: Response) {
-    try {
-      const patients = await getConnection()
-        .createQueryBuilder()
-        .select('patient')
-        .from(Patient, 'patient')
-        .getMany();
-      return res.status(200).send(patients);
-    } catch (err) {
-      console.error(`Something is wrong getting patients ${err}`);
-      return res.status(403);
-    }
-  }
-
   async addPatient(req: AuthRequest, res: Response) {
     try {
       const {
@@ -49,6 +35,21 @@ class PatientResolvers {
       });
     } catch (err) {
       res.status(400).send(`Problem adding patient ${err}`);
+    }
+  }
+
+  async getAllPatients(req: AuthRequest, res: Response) {
+    try {
+      const patients = await getConnection()
+        .getRepository(Patient)
+        .createQueryBuilder('patient')
+        .innerJoin('patient.providers', 'providers') // second param can be anything
+        // just have to use the same on the first param of where
+        .where('providers.id = :providerId', { providerId: req.user.id })
+        .getMany();
+      res.status(200).send(patients);
+    } catch (err) {
+      console.error('whatever');
     }
   }
 }
