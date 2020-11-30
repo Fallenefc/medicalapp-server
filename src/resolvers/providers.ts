@@ -7,7 +7,7 @@ import { v4 } from 'uuid';
 import Provider from '../entities/Provider';
 import sendEmail from '../utils/emailSend';
 
-interface AuthRequest extends Request {
+export interface AuthRequest extends Request {
   user?: any,
 }
 
@@ -24,26 +24,16 @@ class ProvidersResolvers {
           });
           throw new Error();
         }
-        const provider = await getConnection()
-          .createQueryBuilder()
-          .insert()
-          .into(Provider)
-          .values({
-            email,
-            password: hashedPass,
-            name,
-            title,
-            resetPassword: '',
-          })
-          .execute();
-        console.log(`Added to database: ${JSON.stringify(provider)}`);
-        return res.status(200).send({
-          ...provider.identifiers[0],
+        const provider = await Provider.create({
           email,
-          hashedPass,
+          password: hashedPass,
           name,
           title,
-        });
+          resetPassword: '',
+        })
+          .save();
+        console.log(`Added to database: ${JSON.stringify(provider)}`);
+        return res.status(200).send(provider);
       });
       return;
     } catch (err) {

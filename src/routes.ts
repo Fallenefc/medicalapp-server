@@ -18,4 +18,7 @@ router.get('/me', authMiddleware, ProviderControllers.profile);
 router.post('/forgotPassword', ProviderControllers.forgotPassword);
 router.post('/resetPassword', ProviderControllers.resetPassword);
 
+// Patient Routes
+router.post('/patients', authMiddleware, PatientControllers.addPatient);
+
 export default router;

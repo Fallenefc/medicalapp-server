@@ -1,6 +1,6 @@
 import {
   Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn,
-  ManyToMany, JoinTable, OneToMany,
+  ManyToMany, JoinTable, OneToMany, BaseEntity,
 } from 'typeorm';
 import Patient from './Patient';
 import Event from './Event';
@@ -11,7 +11,7 @@ import Event from './Event';
     name: 'ASC',
   },
 })
-class Provider {
+class Provider extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -37,7 +37,7 @@ class Provider {
   updatedAt: Date;
 
   @ManyToMany(() => Patient, (patient) => patient.providers)
-  @JoinTable()
+  @JoinTable({ name: 'patient-provider' })
   patients: Patient[];
 
   @OneToMany(() => Event, (event) => event.provider)

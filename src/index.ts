@@ -8,6 +8,8 @@ import bodyParser from 'body-parser';
 import Patient from './entities/Patient';
 import Provider from './entities/Provider';
 import router from './routes';
+import Event from './entities/Event';
+import Measurement from './entities/Measurement';
 
 // dotenv.config({ path: resolve(__dirname, '../.env') });
 dotenv.config();
@@ -23,8 +25,6 @@ app.use(bodyParser.json());
 app.use(cors(corsConfig));
 app.use(router);
 
-// app.get('/', () => sendEmail('arylmoraesn@gmail.com', 'test content'));
-
 (async () => {
   try {
   // eslint-disable-next-line no-unused-vars
@@ -35,7 +35,7 @@ app.use(router);
       username: 'postgres',
       password: process.env.DB_PASSWORD,
       database: 'medicalapp',
-      entities: [Patient, Provider],
+      entities: [Patient, Provider, Event, Measurement],
       synchronize: true, // DO NOT USE FOR PRODUCTION! USE MIGRATIONS INSTEAD
     });
     app.listen(process.env.PORT, () => {

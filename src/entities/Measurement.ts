@@ -1,10 +1,10 @@
 import {
-  Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToMany,
+  Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToMany, BaseEntity,
 } from 'typeorm';
 import Event from './Event';
 
 @Entity()
-class Measurement {
+class Measurement extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 

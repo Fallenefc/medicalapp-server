@@ -1,13 +1,14 @@
 import {
   Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn,
   ManyToOne,
+  BaseEntity,
 } from 'typeorm';
 import Measurement from './Measurement';
 import Patient from './Patient';
 import Provider from './Provider';
 
 @Entity()
-class Event {
+class Event extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
