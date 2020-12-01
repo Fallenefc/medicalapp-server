@@ -5,6 +5,7 @@ import EventResolvers from './resolvers/events';
 import MeasurementsResolvers from './resolvers/measurement';
 import PatientResolvers from './resolvers/patients';
 import ProvidersResolvers from './resolvers/providers';
+import WarningResolvers from './resolvers/warnings';
 
 const router = express.Router();
 
@@ -13,6 +14,7 @@ const ProviderControllers = new ProvidersResolvers();
 const MeasurementControllersDev = new MeasurementResolverDev();
 const EventControllers = new EventResolvers();
 const MeasurementControllers = new MeasurementsResolvers();
+const WarningControllers = new WarningResolvers();
 
 // Login and Signup
 router.post('/signup', ProviderControllers.register);
@@ -27,8 +29,12 @@ router.get('/patients', authMiddleware, PatientControllers.getAllPatients);
 
 // Event Routes
 router.post('/event', authMiddleware, EventControllers.createEvent);
-router.get('/event', authMiddleware, EventControllers.getAllProviderEvents);
+router.get('/event', authMiddleware, EventControllers.getAllProviderEvents); // only in dev mode
 router.get('/events/:patientId', authMiddleware, EventControllers.patientGetAllEvents);
+
+// Warning Routes
+router.post('/warning', authMiddleware, WarningControllers.createWarning);
+router.get('/warnings/:patientId', authMiddleware, WarningControllers.patientGetAllWarnings);
 
 // Get Measurements
 router.get('/measurements', MeasurementControllers.getMeasurements);

@@ -14,8 +14,9 @@ class Warning extends BaseEntity {
   @Column()
   description: string;
 
+  // Change later to date type!
   @Column()
-  date: Date;
+  date: string;
 
   // Store by HEX
   @Column()
