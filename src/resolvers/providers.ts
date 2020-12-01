@@ -33,7 +33,9 @@ class ProvidersResolvers {
         })
           .save();
         console.log(`Added to database: ${JSON.stringify(provider)}`);
-        return res.status(200).send(provider);
+        return res.status(200).send({
+          email: provider.email,
+        });
       });
       return;
     } catch (err) {
