@@ -11,6 +11,7 @@ class PatientResolvers {
       const {
         uniqueId, title, firstName, lastName, DoB, sex, gender, email,
       } = req.body;
+      if (!uniqueId || !title || !firstName || !lastName || !DoB) throw new Error('Missing params');
       const linkedProvider: any = await Provider.findOne(req.user.id);
       const patient: Patient = await Patient.create({
         uniqueId,

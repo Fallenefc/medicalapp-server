@@ -9,6 +9,7 @@ class EventResolvers {
       const {
         date, measurementValue, measurementName, patientId,
       } = req.body;
+      if (!date || !measurementValue || !measurementName || !patientId) throw new Error('Missing params');
       const provider = req.user;
 
       const event = await Event.create({
@@ -22,6 +23,27 @@ class EventResolvers {
       return res.status(200).send(event);
     } catch (err) {
       console.error(`Something is wrong ghen creatingetting patients ${err}`);
+      return res.status(400);
+    }
+  }
+
+  async createManyEvents(req: AuthRequest, res: Response) {
+    try {
+      const eventsArray: any = [];
+      const provider = req.user;
+      await req.body.events.forEach(async (event: any) => {
+        const generatedEvent = await Event.create({
+          date: event.date,
+          measurementValue: event.measurementValue,
+          measurement: event.measurementName,
+          patient: event.patientId,
+          providerId: provider.id,
+        });
+        eventsArray.push(generatedEvent);
+      });
+      return res.status(200).send(eventsArray);
+    } catch (err) {
+      console.error(err);
       return res.status(400);
     }
   }
@@ -40,7 +62,7 @@ class EventResolvers {
     try {
       // TODO: Make a check if the provider actually has the patient as his patient
       const { patientId } = req.params;
-      const patientEvents = await Event.find({ where: { patient: patientId } });
+      const patientEvents: any = await Event.find({ where: { patient: patientId }, relations: ['measurement'] });
       return res.status(200).send(patientEvents);
     } catch (err) {
       console.error(`error: ${err}`);

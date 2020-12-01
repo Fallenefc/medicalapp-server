@@ -10,6 +10,8 @@ class WarningResolvers {
         title, description, date, type, patient,
       } = req.body;
 
+      if (!title || !description || !date || !type || !patient) throw new Error('Missing params');
+
       const warning = await Warning.create({
         title,
         description,

@@ -19,7 +19,7 @@ const app = express();
 
 const corsConfig = {
   origin: [process.env.FRONTEND_URL, process.env.LANDING_URL],
-  credentials: true,
+  credentials: true, // this is for allowing cookies
 };
 
 app.use(bodyParser.json());

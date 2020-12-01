@@ -25,6 +25,9 @@ class Event extends BaseEntity {
   @UpdateDateColumn()
   updatedAt: Date;
 
+  // @Column()
+  // measurementId: string;
+
   @ManyToOne(() => Measurement, (measurement: Measurement) => measurement.event)
   measurement: Measurement;
 

@@ -17,6 +17,7 @@ class ProvidersResolvers {
       const {
         email, password, name, title,
       } = req.body;
+      if (!email || !password || !name || !title) throw new Error('Missing params');
       bcrypt.hash(password, 10, async (err, hashedPass) => {
         if (err) {
           res.json({
@@ -68,7 +69,7 @@ class ProvidersResolvers {
         }),
       });
     } catch (err) {
-      console.error(`Something is wrong login: ${err}`);
+      console.error(`Something is wrong with login: ${err}`);
       return res.status(403).send({
         error: 'Forbidden',
       });
@@ -86,7 +87,7 @@ class ProvidersResolvers {
         title: data.title,
       });
     } catch (err) {
-      console.error(`Something is wrong profile: ${err}`);
+      console.error(`Something is wrong fetching profile: ${err}`);
       res.sendStatus(403);
     }
   }
@@ -120,6 +121,7 @@ class ProvidersResolvers {
   async resetPassword(req: Request, res: Response) {
     try {
       const { token, password } = req.body;
+      if (!token || !password) throw new Error('Missing token or new password');
       bcrypt.hash(password, 10, async (err, hashedPass) => {
         if (err) throw new Error();
         const provider = await getConnection()
