@@ -37,6 +37,10 @@ router.post('/manySnapshots', authMiddleware, SnapshotControllers.createManySnap
 router.post('/flag', authMiddleware, FlagControllers.createFlag);
 router.get('/flags/:patientId', authMiddleware, FlagControllers.patientGetAllFlags);
 
+// Hybrid Snapshot and Flag route
+// This will add both snapshots and Flag on a single date:
+router.post('/addSnapAndFlag', authMiddleware, SnapshotControllers.createManySnapshotsAndFlags);
+
 // Get Measurements
 router.get('/measurements', MeasurementControllers.getMeasurements);
 

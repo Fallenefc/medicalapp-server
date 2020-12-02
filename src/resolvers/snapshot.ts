@@ -56,12 +56,15 @@ class SnapshotResolvers {
   async createManySnapshotsAndFlags(req: AuthRequest, res: Response) {
     try {
       const provider = req.user;
+      const patient = req.body.patientId;
+      const { date } = req.body;
       const snapshotsArray = await Promise.all(req.body.snapshots.map(async (snapshot: any) => {
+        const { measurementValue, measurement } = snapshot;
         const singleSnapshot: any = await Snapshot.create({
-          date: req.body.date,
-          measurementValue: snapshot.measurementValue,
-          measurement: snapshot.measurement,
-          patient: req.body.patientId,
+          date,
+          measurementValue,
+          measurement,
+          patient,
           providerId: provider.id,
         });
         await singleSnapshot.save();
@@ -70,11 +73,11 @@ class SnapshotResolvers {
       const flagsArray = await Promise.all(req.body.flags.map(async (flag: any) => {
         const { title, description, type } = flag;
         const singleFlag: any = await Flag.create({
-          date: req.body.date,
+          date,
           title,
           description,
           type,
-          patient: req.body.patientId,
+          patient,
         });
         await singleFlag.save();
         return singleFlag;
