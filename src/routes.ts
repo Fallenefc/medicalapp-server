@@ -31,6 +31,7 @@ router.get('/patients', authMiddleware, PatientControllers.getAllPatients);
 router.post('/event', authMiddleware, EventControllers.createEvent);
 router.get('/event', authMiddleware, EventControllers.getAllProviderEvents); // only in dev mode
 router.get('/events/:patientId', authMiddleware, EventControllers.patientGetAllEvents);
+router.post('/manyEvents', authMiddleware, EventControllers.createManyEvents);
 
 // Warning Routes
 router.post('/warning', authMiddleware, WarningControllers.createWarning);

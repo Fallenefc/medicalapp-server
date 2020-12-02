@@ -27,20 +27,21 @@ class EventResolvers {
     }
   }
 
+  // make a map and resolve all promises
   async createManyEvents(req: AuthRequest, res: Response) {
     try {
-      const eventsArray: any = [];
       const provider = req.user;
-      await req.body.events.forEach(async (event: any) => {
-        const generatedEvent = await Event.create({
-          date: event.date,
+      const eventsArray = await Promise.all(req.body.events.map(async (event: any) => {
+        const singleEvent: any = await Event.create({
+          date: req.body.date,
           measurementValue: event.measurementValue,
-          measurement: event.measurementName,
-          patient: event.patientId,
+          measurement: event.measurement,
+          patient: req.body.patientId,
           providerId: provider.id,
         });
-        eventsArray.push(generatedEvent);
-      });
+        await singleEvent.save();
+        return singleEvent;
+      }));
       return res.status(200).send(eventsArray);
     } catch (err) {
       console.error(err);
