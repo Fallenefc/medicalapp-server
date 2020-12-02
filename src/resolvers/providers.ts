@@ -109,7 +109,7 @@ class ProvidersResolvers {
         .where('email = :email', { email: req.body.email })
         .execute();
       // TODO: On the next line, change the hard coded string address to the front-end URL
-      sendEmail(req.body.email, `http://localhost:3000/resetPassword/${token}`);
+      sendEmail(req.body.email, `http://localhost:3000/resetPassword?token=${token}`);
       res.status(200);
       res.send({ status: 'Sent token to email' });
     } catch (err) {
