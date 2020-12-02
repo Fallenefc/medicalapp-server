@@ -5,7 +5,7 @@ import populateMeasurements from '../../utils/development/measurementsMock';
 import Measurement from '../../entities/Measurement';
 
 class MeasurementResolverDev {
-  async createEvent(req: Request, res: Response) {
+  async createMeasurement(req: Request, res: Response) {
     try {
       const { name, minValue, maxValue } = req.body;
       const measurement = await Measurement.create({

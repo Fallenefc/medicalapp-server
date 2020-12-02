@@ -2,6 +2,7 @@
 import { Response } from 'express';
 import { AuthRequest } from './providers';
 import Snapshot from '../entities/Snapshot';
+import Flag from '../entities/Flag';
 
 class SnapshotResolvers {
   async createSnapshot(req: AuthRequest, res: Response) {
@@ -43,6 +44,45 @@ class SnapshotResolvers {
         return singleSnapshot;
       }));
       return res.status(200).send(snapshotsArray);
+    } catch (err) {
+      console.error(err);
+      return res.status(400);
+    }
+  }
+
+  // This is a test route to add multiple snapshots and flags at once;
+  // So you dont have to make multiple front-end requests.
+  // Also returns both snapshots and flags to store on front-end state.
+  async createManySnapshotsAndFlags(req: AuthRequest, res: Response) {
+    try {
+      const provider = req.user;
+      const snapshotsArray = await Promise.all(req.body.snapshots.map(async (snapshot: any) => {
+        const singleSnapshot: any = await Snapshot.create({
+          date: req.body.date,
+          measurementValue: snapshot.measurementValue,
+          measurement: snapshot.measurement,
+          patient: req.body.patientId,
+          providerId: provider.id,
+        });
+        await singleSnapshot.save();
+        return singleSnapshot;
+      }));
+      const flagsArray = await Promise.all(req.body.flags.map(async (flag: any) => {
+        const { title, description, type } = flag;
+        const singleFlag: any = await Flag.create({
+          date: req.body.date,
+          title,
+          description,
+          type,
+          patient: req.body.patientId,
+        });
+        await singleFlag.save();
+        return singleFlag;
+      }));
+      return res.status(200).send({
+        snapshots: snapshotsArray,
+        flags: flagsArray,
+      });
     } catch (err) {
       console.error(err);
       return res.status(400);

@@ -5,7 +5,7 @@ import SnapshotResolvers from './resolvers/snapshot';
 import MeasurementsResolvers from './resolvers/measurement';
 import PatientResolvers from './resolvers/patients';
 import ProvidersResolvers from './resolvers/providers';
-import FlagResolvers from './resolvers/warnings';
+import FlagResolvers from './resolvers/flags';
 
 const router = express.Router();
 
@@ -47,7 +47,7 @@ router.get('/measurements', MeasurementControllers.getMeasurements);
 //
 
 // // Measurement Route (this is just for development)
-// router.post('/measurement', MeasurementControllersDev.createEvent);
+router.post('/measurement', MeasurementControllersDev.createMeasurement);
 
 // USE THE FOLLOWING ROUTE ONLY ONCE TO POPULATE YOUR MEASUREMENTS TABLE!!
 // REMOVE THIS IN PRODUCTION
