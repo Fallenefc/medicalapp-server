@@ -2,7 +2,6 @@ import 'reflect-metadata';
 import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
-// import { resolve } from 'path';
 import { createConnection, Connection } from 'typeorm';
 import bodyParser from 'body-parser';
 import Patient from './entities/Patient';
@@ -12,7 +11,6 @@ import Event from './entities/Event';
 import Measurement from './entities/Measurement';
 import Warning from './entities/Warning';
 
-// dotenv.config({ path: resolve(__dirname, '../.env') });
 dotenv.config();
 
 const app = express();
@@ -33,9 +31,9 @@ app.use(router);
       type: 'postgres',
       host: 'localhost',
       port: 5432,
-      username: 'postgres',
+      username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
-      database: 'medicalapp',
+      database: process.env.DB_NAME,
       entities: [Patient, Provider, Event, Measurement, Warning],
       synchronize: true, // DO NOT USE FOR PRODUCTION! USE MIGRATIONS INSTEAD
     });

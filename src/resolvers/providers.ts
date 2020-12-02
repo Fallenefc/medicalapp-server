@@ -111,7 +111,7 @@ class ProvidersResolvers {
       // TODO: On the next line, change the hard coded string address to the front-end URL
       sendEmail(req.body.email, `http://localhost:3000/resetPassword/${token}`);
       res.status(200);
-      res.send({ token });
+      res.send({ status: 'Sent token to email' });
     } catch (err) {
       console.error(`Something is wrong forgot password: ${err}`);
       res.sendStatus(403);
