@@ -7,9 +7,9 @@ import bodyParser from 'body-parser';
 import Patient from './entities/Patient';
 import Provider from './entities/Provider';
 import router from './routes';
-import Event from './entities/Event';
+import Snapshot from './entities/Snapshot';
 import Measurement from './entities/Measurement';
-import Warning from './entities/Warning';
+import Flag from './entities/Flag';
 
 dotenv.config();
 
@@ -34,7 +34,7 @@ app.use(router);
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
-      entities: [Patient, Provider, Event, Measurement, Warning],
+      entities: [Patient, Provider, Snapshot, Measurement, Flag],
       synchronize: true, // DO NOT USE FOR PRODUCTION! USE MIGRATIONS INSTEAD
     });
     app.listen(process.env.PORT, () => {

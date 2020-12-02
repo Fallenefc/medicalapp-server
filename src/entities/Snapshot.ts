@@ -8,7 +8,7 @@ import Patient from './Patient';
 import Provider from './Provider';
 
 @Entity()
-class Event extends BaseEntity {
+class Snapshot extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -25,17 +25,14 @@ class Event extends BaseEntity {
   @UpdateDateColumn()
   updatedAt: Date;
 
-  // @Column()
-  // measurementId: string;
-
-  @ManyToOne(() => Measurement, (measurement: Measurement) => measurement.event)
+  @ManyToOne(() => Measurement, (measurement: Measurement) => measurement.snapshot)
   measurement: Measurement;
 
-  @ManyToOne(() => Provider, (provider: Provider) => provider.event)
+  @ManyToOne(() => Provider, (provider: Provider) => provider.snapshot)
   providerId: Provider;
 
-  @ManyToOne(() => Patient, (patient: Patient) => patient.event)
+  @ManyToOne(() => Patient, (patient: Patient) => patient.snapshot)
   patient: Patient;
 }
 
-export default Event;
+export default Snapshot;

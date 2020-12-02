@@ -1,7 +1,7 @@
 import {
   Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToMany, BaseEntity,
 } from 'typeorm';
-import Event from './Event';
+import Snapshot from './Snapshot';
 
 //
 
@@ -25,8 +25,8 @@ class Measurement extends BaseEntity {
   @UpdateDateColumn()
   updatedAt: Date;
 
-  @OneToMany(() => Event, (event) => event.measurement)
-  event: Event[];
+  @OneToMany(() => Snapshot, (snapshot) => snapshot.measurement)
+  snapshot: Snapshot[];
 }
 
 export default Measurement;

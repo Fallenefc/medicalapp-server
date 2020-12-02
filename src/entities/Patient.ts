@@ -3,8 +3,8 @@ import {
   UpdateDateColumn, ManyToMany, OneToMany, BaseEntity,
 } from 'typeorm';
 import Provider from './Provider';
-import Event from './Event';
-import Warning from './Warning';
+import Snapshot from './Snapshot';
+import Flag from './Flag';
 
 @Entity()
 class Patient extends BaseEntity {
@@ -47,11 +47,11 @@ class Patient extends BaseEntity {
   @ManyToMany(() => Provider, (provider) => provider.patients)
   providers: Provider[];
 
-  @OneToMany(() => Event, (event) => event.patient)
-  event: Event[];
+  @OneToMany(() => Snapshot, (snapshot) => snapshot.patient)
+  snapshot: Snapshot[];
 
-  @OneToMany(() => Warning, (warning) => warning.patient)
-  warning: Warning[];
+  @OneToMany(() => Flag, (flag) => flag.patient)
+  flag: Flag[];
 }
 
 export default Patient;

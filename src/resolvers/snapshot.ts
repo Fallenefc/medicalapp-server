@@ -1,10 +1,10 @@
 /* eslint-disable class-methods-use-this */
 import { Response } from 'express';
 import { AuthRequest } from './providers';
-import Event from '../entities/Event';
+import Snapshot from '../entities/Snapshot';
 
-class EventResolvers {
-  async createEvent(req: AuthRequest, res: Response) {
+class SnapshotResolvers {
+  async createSnapshot(req: AuthRequest, res: Response) {
     try {
       const {
         date, measurementValue, measurementName, patientId,
@@ -12,7 +12,7 @@ class EventResolvers {
       if (!date || !measurementValue || !measurementName || !patientId) throw new Error('Missing params');
       const provider = req.user;
 
-      const event = await Event.create({
+      const snapshot = await Snapshot.create({
         date,
         measurementValue,
         measurement: measurementName,
@@ -20,51 +20,51 @@ class EventResolvers {
         providerId: provider.id,
       })
         .save();
-      return res.status(200).send(event);
+      return res.status(200).send(snapshot);
     } catch (err) {
-      console.error(`Something is wrong ghen creatingetting patients ${err}`);
+      console.error(`Something is wrong creating a snapshot ${err}`);
       return res.status(400);
     }
   }
 
   // make a map and resolve all promises
-  async createManyEvents(req: AuthRequest, res: Response) {
+  async createManySnapshots(req: AuthRequest, res: Response) {
     try {
       const provider = req.user;
-      const eventsArray = await Promise.all(req.body.events.map(async (event: any) => {
-        const singleEvent: any = await Event.create({
+      const snapshotsArray = await Promise.all(req.body.snapshots.map(async (snapshot: any) => {
+        const singleSnapshot: any = await Snapshot.create({
           date: req.body.date,
-          measurementValue: event.measurementValue,
-          measurement: event.measurement,
+          measurementValue: snapshot.measurementValue,
+          measurement: snapshot.measurement,
           patient: req.body.patientId,
           providerId: provider.id,
         });
-        await singleEvent.save();
-        return singleEvent;
+        await singleSnapshot.save();
+        return singleSnapshot;
       }));
-      return res.status(200).send(eventsArray);
+      return res.status(200).send(snapshotsArray);
     } catch (err) {
       console.error(err);
       return res.status(400);
     }
   }
 
-  async getAllProviderEvents(req: AuthRequest, res: Response) {
+  async getAllProviderSnapshots(req: AuthRequest, res: Response) {
     try {
-      const events = await Event.find({ where: { providerId: req.user.id } });
-      return res.status(200).send(events);
+      const snapshots = await Snapshot.find({ where: { providerId: req.user.id } });
+      return res.status(200).send(snapshots);
     } catch (err) {
       console.error(`error: ${err}`);
       return res.status(400);
     }
   }
 
-  async patientGetAllEvents(req: AuthRequest, res: Response) {
+  async patientGetAllSnapshots(req: AuthRequest, res: Response) {
     try {
       // TODO: Make a check if the provider actually has the patient as his patient
       const { patientId } = req.params;
-      const patientEvents: any = await Event.find({ where: { patient: patientId }, relations: ['measurement'] });
-      return res.status(200).send(patientEvents);
+      const patientSnapshots: any = await Snapshot.find({ where: { patient: patientId }, relations: ['measurement'] });
+      return res.status(200).send(patientSnapshots);
     } catch (err) {
       console.error(`error: ${err}`);
       return res.status(400);
@@ -72,4 +72,4 @@ class EventResolvers {
   }
 }
 
-export default EventResolvers;
+export default SnapshotResolvers;
