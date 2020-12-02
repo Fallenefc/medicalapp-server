@@ -124,15 +124,13 @@ class ProvidersResolvers {
       if (!token || !password) throw new Error('Missing token or new password');
       bcrypt.hash(password, 10, async (err, hashedPass) => {
         if (err) throw new Error();
-        const provider = await getConnection()
+        await getConnection()
           .createQueryBuilder()
           .update(Provider)
-          .set({ password: hashedPass })
+          .set({ password: hashedPass, resetPassword: '' })
           .where('resetPassword = :resetPassword', { resetPassword: token })
-          .set({ resetPassword: '' })
           .execute();
-        res.status(200);
-        res.send(provider);
+        res.sendStatus(200);
       });
     } catch (err) {
       console.error(`Something is wrong with resetting password: ${err}`);
