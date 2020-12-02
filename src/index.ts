@@ -2,22 +2,27 @@ import 'reflect-metadata';
 import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
-import { resolve } from 'path';
 import { createConnection, Connection } from 'typeorm';
+import bodyParser from 'body-parser';
+import Patient from './entities/Patient';
+import Provider from './entities/Provider';
+import router from './routes';
+import Event from './entities/Event';
+import Measurement from './entities/Measurement';
+import Warning from './entities/Warning';
 
-dotenv.config({ path: resolve(__dirname, '../.env') });
+dotenv.config();
 
 const app = express();
 
 const corsConfig = {
-  origin: process.env.FRONTEND_URL,
-  credentials: true,
+  origin: [process.env.FRONTEND_URL, process.env.LANDING_URL],
+  credentials: true, // this is for allowing cookies
 };
 
-app.use(express.json());
+app.use(bodyParser.json());
 app.use(cors(corsConfig));
-
-app.get('/', () => console.log('hello world'));
+app.use(router);
 
 (async () => {
   try {
@@ -26,9 +31,11 @@ app.get('/', () => console.log('hello world'));
       type: 'postgres',
       host: 'localhost',
       port: 5432,
-      username: 'postgres',
+      username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
-      database: 'medicalapp',
+      database: process.env.DB_NAME,
+      entities: [Patient, Provider, Event, Measurement, Warning],
+      synchronize: true, // DO NOT USE FOR PRODUCTION! USE MIGRATIONS INSTEAD
     });
     app.listen(process.env.PORT, () => {
       console.log(`Server is up and listening on port ${process.env.PORT}.`);
