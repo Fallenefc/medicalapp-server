@@ -1,0 +1,33 @@
+{
+	"date": "3",
+	"patientId": "0e0bf462-c273-4580-81a5-da4027928046",
+	"snapshots": [
+  {
+    "measurementValue": 130,
+    "measurement": "blood_pressure_sys"
+  },
+  {
+    "measurementValue": 80,
+    "measurement": "blood_pressure_dia"
+  },
+  {
+    "measurementValue": 95,
+    "measurement": "glucose"
+  },
+	  {
+    "measurementValue": 162,
+    "measurement": "ldl"
+  },
+	  {
+    "measurementValue": 57,
+    "measurement": "hdl"
+  }
+],
+	"flags": [
+  {
+    "title": "Started simvastatin",
+    "description": "Started Simvastatin 20mg/day for cholesterol",
+		"type": "moderate"
+  }
+]
+}

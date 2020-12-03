@@ -1,11 +1,11 @@
 import {
-  Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToMany, BaseEntity,
+  Entity, Column, CreateDateColumn, UpdateDateColumn, OneToMany, BaseEntity, PrimaryColumn,
 } from 'typeorm';
 import Snapshot from './Snapshot';
 
 @Entity()
 class Measurement extends BaseEntity {
-  @PrimaryGeneratedColumn('uuid')
+  @PrimaryColumn(('varchar'))
   id: string;
 
   @Column()

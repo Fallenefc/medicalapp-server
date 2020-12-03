@@ -1,0 +1,27 @@
+{
+	"date": "4",
+	"patientId": "0e0bf462-c273-4580-81a5-da4027928046",
+	"snapshots": [
+  {
+    "measurementValue": 124,
+    "measurement": "blood_pressure_sys"
+  },
+  {
+    "measurementValue": 75,
+    "measurement": "blood_pressure_dia"
+  },
+  {
+    "measurementValue": 80,
+    "measurement": "glucose"
+  },
+	  {
+    "measurementValue": 120,
+    "measurement": "ldl"
+  },
+	  {
+    "measurementValue": 64,
+    "measurement": "hdl"
+  }
+],
+  "flags": []
+}

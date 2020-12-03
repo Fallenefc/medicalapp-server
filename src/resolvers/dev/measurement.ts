@@ -31,7 +31,7 @@ class MeasurementResolverDev {
         .execute();
       return res.status(200).send(populate);
     } catch (err) {
-      console.error(`Something is wrong ghen creatingetting patients ${err}`);
+      console.error(`Something is wrong populating ${err}`);
       return res.status(400);
     }
   }
