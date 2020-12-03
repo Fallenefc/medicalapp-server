@@ -12,10 +12,10 @@ class Patient extends BaseEntity {
   id: string;
 
   @Column({ unique: true })
-  uniqueId: string | null;
+  uniqueId: string;
 
   @Column()
-  title: string | null;
+  title: string;
 
   @Column()
   firstName: string;
@@ -24,13 +24,13 @@ class Patient extends BaseEntity {
   lastName: string;
 
   @Column({ default: null })
-  email: string;
+  email: string | null;
 
-  @Column({ default: null })
-  DoB: string | null;
+  @Column()
+  DoB: string;
 
-  @Column({ default: null })
-  sex: number | null;
+  @Column()
+  sex: number;
 
   @Column({ default: null })
   gender: string | null;

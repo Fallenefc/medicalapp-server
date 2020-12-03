@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 /* eslint-disable class-methods-use-this */
 import { Response } from 'express';
 import { AuthRequest } from './providers';
@@ -5,6 +6,7 @@ import Snapshot from '../entities/Snapshot';
 import Flag from '../entities/Flag';
 
 class SnapshotResolvers {
+  // most likely delete this
   async createSnapshot(req: AuthRequest, res: Response) {
     try {
       const {
@@ -28,12 +30,12 @@ class SnapshotResolvers {
     }
   }
 
-  // make a map and resolve all promises
+  // most likely delete this
   async createManySnapshots(req: AuthRequest, res: Response) {
     try {
       const provider = req.user;
-      const snapshotsArray = await Promise.all(req.body.snapshots.map(async (snapshot: any) => {
-        const singleSnapshot: any = await Snapshot.create({
+      const snapshotsArray = await Promise.all(req.body.snapshots.map(async (snapshot: Snapshot) => {
+        const singleSnapshot: Snapshot = Snapshot.create({
           date: req.body.date,
           measurementValue: snapshot.measurementValue,
           measurement: snapshot.measurement,
@@ -58,9 +60,9 @@ class SnapshotResolvers {
       const provider = req.user;
       const patient = req.body.patientId;
       const { date } = req.body;
-      const snapshotsArray = await Promise.all(req.body.snapshots.map(async (snapshot: any) => {
+      const snapshotsArray = await Promise.all(req.body.snapshots.map(async (snapshot: Snapshot) => {
         const { measurementValue, measurement } = snapshot;
-        const singleSnapshot: any = await Snapshot.create({
+        const singleSnapshot: Snapshot = Snapshot.create({
           date,
           measurementValue,
           measurement,
@@ -70,9 +72,9 @@ class SnapshotResolvers {
         await singleSnapshot.save();
         return singleSnapshot;
       }));
-      const flagsArray = await Promise.all(req.body.flags.map(async (flag: any) => {
+      const flagsArray = await Promise.all(req.body.flags.map(async (flag: Flag) => {
         const { title, description, type } = flag;
-        const singleFlag: any = await Flag.create({
+        const singleFlag: Flag = Flag.create({
           date,
           title,
           description,
@@ -94,7 +96,7 @@ class SnapshotResolvers {
 
   async getAllProviderSnapshots(req: AuthRequest, res: Response) {
     try {
-      const snapshots = await Snapshot.find({ where: { providerId: req.user.id } });
+      const snapshots: Snapshot[] = await Snapshot.find({ where: { providerId: req.user.id } });
       return res.status(200).send(snapshots);
     } catch (err) {
       console.error(`error: ${err}`);
@@ -106,7 +108,7 @@ class SnapshotResolvers {
     try {
       // TODO: Make a check if the provider actually has the patient as his patient
       const { patientId } = req.params;
-      const patientSnapshots: any = await Snapshot.find({ where: { patient: patientId }, relations: ['measurement'] });
+      const patientSnapshots: Snapshot[] = await Snapshot.find({ where: { patient: patientId }, relations: ['measurement'] });
       return res.status(200).send(patientSnapshots);
     } catch (err) {
       console.error(`error: ${err}`);

@@ -9,10 +9,10 @@ class PatientResolvers {
   async addPatient(req: AuthRequest, res: Response) {
     try {
       const {
-        uniqueId, title, firstName, lastName, DoB, sex, gender, email,
+        uniqueId, title, firstName, lastName, DoB, sex, gender, email, height,
       } = req.body;
       if (!uniqueId || !title || !firstName || !lastName || !DoB) throw new Error('Missing params');
-      const linkedProvider: any = await Provider.findOne(req.user.id);
+      const linkedProvider: Provider = await Provider.findOne(req.user.id);
       const patient: Patient = await Patient.create({
         uniqueId,
         title,
@@ -22,7 +22,7 @@ class PatientResolvers {
         DoB,
         sex,
         gender,
-        height: null,
+        height,
       })
         .save();
       await getConnection()

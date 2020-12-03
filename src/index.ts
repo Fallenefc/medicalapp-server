@@ -2,7 +2,7 @@ import 'reflect-metadata';
 import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
-import { createConnection, Connection } from 'typeorm';
+import { createConnection } from 'typeorm';
 import bodyParser from 'body-parser';
 import Patient from './entities/Patient';
 import Provider from './entities/Provider';
@@ -26,8 +26,7 @@ app.use(router);
 
 (async () => {
   try {
-  // eslint-disable-next-line no-unused-vars
-    const connection: Connection = await createConnection({
+    await createConnection({
       type: 'postgres',
       host: 'localhost',
       port: 5432,

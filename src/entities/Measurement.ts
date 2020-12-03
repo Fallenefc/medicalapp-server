@@ -3,8 +3,6 @@ import {
 } from 'typeorm';
 import Snapshot from './Snapshot';
 
-//
-
 @Entity()
 class Measurement extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
