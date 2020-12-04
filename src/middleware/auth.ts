@@ -1,11 +1,14 @@
 import jwt from 'jsonwebtoken';
 import { Request, Response } from 'express';
+import dotenv from 'dotenv';
 import { getManager } from 'typeorm';
 import Provider from '../entities/Provider';
 
 interface AuthRequest extends Request {
   user: Provider;
 }
+
+dotenv.config();
 
 const authMiddleware = async (req: AuthRequest, res: Response, next: any) => {
   try {

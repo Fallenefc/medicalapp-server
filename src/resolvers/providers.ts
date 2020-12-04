@@ -2,10 +2,12 @@
 import { getConnection } from 'typeorm';
 import { Request, Response } from 'express';
 import bcrypt from 'bcrypt';
+import dotenv from 'dotenv';
 import jwt from 'jsonwebtoken';
-import { v4 } from 'uuid';
 import Provider from '../entities/Provider';
 import sendEmail from '../utils/emailSend';
+
+dotenv.config();
 
 export interface AuthRequest extends Request {
   user?: any, // correct this type
@@ -60,14 +62,18 @@ class ProvidersResolvers {
       const isValid = await bcrypt.compare(password, provider.password);
       if (!isValid) throw new Error('Passwords do not match');
 
+      const token = jwt.sign({ id: provider.id }, process.env.SECRET_KEY, {
+        expiresIn: process.env.TOKEN_EXPIRATION || 86400, // 1 day
+      });
+
       return res.status(200).json({
         user: {
-          id: provider.id,
           email: provider.email,
+          name: provider.name,
+          id: provider.id,
+          title: provider.title,
         },
-        token: jwt.sign({ id: provider.id }, process.env.SECRET_KEY, {
-          expiresIn: 86400, // 1 day
-        }),
+        token,
       });
     } catch (err) {
       console.error(`Something is wrong with login: ${err}`);
@@ -78,15 +84,20 @@ class ProvidersResolvers {
   }
 
   async profile(req: AuthRequest, res: Response) {
-    // TODO: Also send token on response
     try {
       const data = req.user;
+      const token = jwt.sign({ id: data.id }, process.env.SECRET_KEY, {
+        expiresIn: process.env.TOKEN_EXPIRATION || 86400, // 1 day
+      });
       res.status(200);
       res.send({
-        email: data.email,
-        name: data.name,
-        id: data.id,
-        title: data.title,
+        user: {
+          email: data.email,
+          name: data.name,
+          id: data.id,
+          title: data.title,
+        },
+        token,
       });
     } catch (err) {
       console.error(`Something is wrong fetching profile: ${err}`);
@@ -103,15 +114,18 @@ class ProvidersResolvers {
         .where('provider.email = :email', { email: req.body.email })
         .getOne();
       if (!provider) throw new Error('Provider not found');
-      const token = v4();
+
+      const token = jwt.sign({ id: provider.id }, process.env.SECREY_KEY_RESETPASS, {
+        expiresIn: process.env.TOKEN_EXPIRATION || 86400, // 1 day
+      });
+
       await getConnection()
         .createQueryBuilder()
         .update(Provider)
         .set({ resetPassword: token })
         .where('email = :email', { email: req.body.email })
         .execute();
-      // TODO: On the next line, change the hard coded string address to the landing URL
-      sendEmail(req.body.email, `http://localhost:3000/resetPassword?token=${token}`);
+      sendEmail(req.body.email, `${process.env.LANDING_URL || 'http://localhost:3000'}/resetPassword?token=${token}`);
       res.status(200);
       res.send({ status: 'Sent token to email' });
     } catch (err) {
@@ -124,13 +138,17 @@ class ProvidersResolvers {
     try {
       const { token, password } = req.body;
       if (!token || !password) throw new Error('Missing token or new password');
+      console.log({ token });
+      console.log(process.env.SECRET_KEY_RESETPASS);
+      const jwtCheck: any = jwt.verify(token, process.env.SECREY_KEY_RESETPASS);
       bcrypt.hash(password, 10, async (err, hashedPass) => {
         if (err) throw new Error();
         await getConnection()
           .createQueryBuilder()
           .update(Provider)
-          .set({ password: hashedPass, resetPassword: '' })
-          .where('resetPassword = :resetPassword', { resetPassword: token })
+          // TODO: Remove that later (if it doesnt break)
+          .set({ password: hashedPass })
+          .where('id = :id', { id: jwtCheck.id })
           .execute();
         res.sendStatus(200);
       });
