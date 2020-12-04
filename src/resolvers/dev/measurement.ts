@@ -5,7 +5,7 @@ import populateMeasurements from '../../utils/development/measurementsMock';
 import Measurement from '../../entities/Measurement';
 
 class MeasurementResolverDev {
-  async createEvent(req: Request, res: Response) {
+  async createMeasurement(req: Request, res: Response) {
     try {
       const { name, minValue, maxValue } = req.body;
       const measurement = await Measurement.create({
@@ -31,7 +31,7 @@ class MeasurementResolverDev {
         .execute();
       return res.status(200).send(populate);
     } catch (err) {
-      console.error(`Something is wrong ghen creatingetting patients ${err}`);
+      console.error(`Something is wrong populating ${err}`);
       return res.status(400);
     }
   }

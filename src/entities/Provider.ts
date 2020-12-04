@@ -3,7 +3,7 @@ import {
   ManyToMany, JoinTable, OneToMany, BaseEntity,
 } from 'typeorm';
 import Patient from './Patient';
-import Event from './Event';
+import Snapshot from './Snapshot';
 
 @Entity({
   name: 'provider',
@@ -40,8 +40,8 @@ class Provider extends BaseEntity {
   @JoinTable({ name: 'patient-provider' })
   patients: Patient[];
 
-  @OneToMany(() => Event, (event) => event.providerId)
-  event: Event[];
+  @OneToMany(() => Snapshot, (snapshot) => snapshot.providerId)
+  snapshot: Snapshot[];
 }
 
 export default Provider;

@@ -1,0 +1,33 @@
+{
+	"date": "1",
+	"patientId": "0e0bf462-c273-4580-81a5-da4027928046",
+	"snapshots": [
+  {
+    "measurementValue": 160,
+    "measurement": "blood_pressure_sys"
+  },
+  {
+    "measurementValue": 110,
+    "measurement": "blood_pressure_dia"
+  },
+  {
+    "measurementValue": 70,
+    "measurement": "glucose"
+  },
+	  {
+    "measurementValue": 180,
+    "measurement": "ldl"
+  },
+	  {
+    "measurementValue": 50,
+    "measurement": "hdl"
+  }
+],
+	"flags": [
+  {
+    "title": "Diagnosis: Hypertension",
+    "description": "started following patient for hypertension",
+		"type": "comment"
+  }
+]
+}

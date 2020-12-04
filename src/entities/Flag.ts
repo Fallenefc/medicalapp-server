@@ -4,7 +4,7 @@ import {
 import Patient from './Patient';
 
 @Entity()
-class Warning extends BaseEntity {
+class Flag extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -18,7 +18,7 @@ class Warning extends BaseEntity {
   @Column()
   date: string;
 
-  // Store by HEX
+  // Store by HEX? Or by type string?
   @Column()
   type: string;
 
@@ -28,8 +28,8 @@ class Warning extends BaseEntity {
   @UpdateDateColumn()
   updatedAt: Date;
 
-  @ManyToOne(() => Patient, (patient: Patient) => patient.event)
+  @ManyToOne(() => Patient, (patient: Patient) => patient.snapshot)
   patient: Patient;
 }
 
-export default Warning;
+export default Flag;

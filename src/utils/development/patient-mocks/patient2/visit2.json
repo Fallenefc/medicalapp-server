@@ -1,0 +1,29 @@
+{
+	"date": "2",
+	"patientId": "2c285291-7c38-47b8-acc0-9f0db08bf47e",
+	"snapshots": [
+  {
+    "measurementValue": 11,
+    "measurement": "hba1c"
+  },
+  {
+    "measurementValue": 35,
+    "measurement": "proteinuria"
+  },
+  {
+    "measurementValue": 250,
+    "measurement": "glucose"
+  },
+  {
+    "measurementValue": 0.9,
+    "measurement": "creatinine"
+  }
+],
+	"flags": [
+  {
+    "title": "Medication: Metformin",
+    "description": "started following patient on metformin",
+		"type": "warning"
+  }
+]
+}

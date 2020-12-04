@@ -1,0 +1,29 @@
+{
+	"date": "1",
+	"patientId": "2c285291-7c38-47b8-acc0-9f0db08bf47e",
+	"snapshots": [
+  {
+    "measurementValue": 12,
+    "measurement": "hba1c"
+  },
+  {
+    "measurementValue": 20,
+    "measurement": "proteinuria"
+  },
+  {
+    "measurementValue": 300,
+    "measurement": "glucose"
+  },
+  {
+    "measurementValue": 0.8,
+    "measurement": "creatinine"
+  }
+],
+	"flags": [
+  {
+    "title": "Diagnosis: Diabetes",
+    "description": "started following patient for diabetes",
+		"type": "comment"
+  }
+]
+}

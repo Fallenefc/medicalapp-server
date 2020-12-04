@@ -1,0 +1,33 @@
+{
+	"date": "2",
+	"patientId": "0e0bf462-c273-4580-81a5-da4027928046",
+	"snapshots": [
+  {
+    "measurementValue": 150,
+    "measurement": "blood_pressure_sys"
+  },
+  {
+    "measurementValue": 107,
+    "measurement": "blood_pressure_dia"
+  },
+  {
+    "measurementValue": 80,
+    "measurement": "glucose"
+  },
+	  {
+    "measurementValue": 170,
+    "measurement": "ldl"
+  },
+	  {
+    "measurementValue": 52,
+    "measurement": "hdl"
+  }
+],
+	"flags": [
+  {
+    "title": "Started enalapril",
+    "description": "Started Enalapril 5mg/day",
+		"type": "moderate"
+  }
+]
+}

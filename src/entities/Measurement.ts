@@ -1,13 +1,11 @@
 import {
-  Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToMany, BaseEntity,
+  Entity, Column, CreateDateColumn, UpdateDateColumn, OneToMany, BaseEntity, PrimaryColumn,
 } from 'typeorm';
-import Event from './Event';
-
-//
+import Snapshot from './Snapshot';
 
 @Entity()
 class Measurement extends BaseEntity {
-  @PrimaryGeneratedColumn('uuid')
+  @PrimaryColumn(('varchar'))
   id: string;
 
   @Column()
@@ -25,8 +23,8 @@ class Measurement extends BaseEntity {
   @UpdateDateColumn()
   updatedAt: Date;
 
-  @OneToMany(() => Event, (event) => event.measurement)
-  event: Event[];
+  @OneToMany(() => Snapshot, (snapshot) => snapshot.measurement)
+  snapshot: Snapshot[];
 }
 
 export default Measurement;

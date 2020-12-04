@@ -2,14 +2,14 @@ import 'reflect-metadata';
 import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
-import { createConnection, Connection } from 'typeorm';
+import { createConnection } from 'typeorm';
 import bodyParser from 'body-parser';
 import Patient from './entities/Patient';
 import Provider from './entities/Provider';
 import router from './routes';
-import Event from './entities/Event';
+import Snapshot from './entities/Snapshot';
 import Measurement from './entities/Measurement';
-import Warning from './entities/Warning';
+import Flag from './entities/Flag';
 
 dotenv.config();
 
@@ -26,15 +26,14 @@ app.use(router);
 
 (async () => {
   try {
-  // eslint-disable-next-line no-unused-vars
-    const connection: Connection = await createConnection({
+    await createConnection({
       type: 'postgres',
-      host: 'localhost',
+      host: 'db',
       port: 5432,
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
-      entities: [Patient, Provider, Event, Measurement, Warning],
+      entities: [Patient, Provider, Snapshot, Measurement, Flag],
       synchronize: true, // DO NOT USE FOR PRODUCTION! USE MIGRATIONS INSTEAD
     });
     app.listen(process.env.PORT, () => {

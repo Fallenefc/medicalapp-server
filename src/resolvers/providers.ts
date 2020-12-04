@@ -8,7 +8,7 @@ import Provider from '../entities/Provider';
 import sendEmail from '../utils/emailSend';
 
 export interface AuthRequest extends Request {
-  user?: any,
+  user?: any, // correct this type
 }
 
 class ProvidersResolvers {
@@ -45,6 +45,7 @@ class ProvidersResolvers {
     }
   }
 
+  // TODO: send the same info as login
   async login(req: Request, res: Response) {
     const { email, password } = req.body;
 
@@ -65,7 +66,7 @@ class ProvidersResolvers {
           email: provider.email,
         },
         token: jwt.sign({ id: provider.id }, process.env.SECRET_KEY, {
-          expiresIn: 86400,
+          expiresIn: 86400, // 1 day
         }),
       });
     } catch (err) {
@@ -77,6 +78,7 @@ class ProvidersResolvers {
   }
 
   async profile(req: AuthRequest, res: Response) {
+    // TODO: Also send token on response
     try {
       const data = req.user;
       res.status(200);
@@ -108,7 +110,7 @@ class ProvidersResolvers {
         .set({ resetPassword: token })
         .where('email = :email', { email: req.body.email })
         .execute();
-      // TODO: On the next line, change the hard coded string address to the front-end URL
+      // TODO: On the next line, change the hard coded string address to the landing URL
       sendEmail(req.body.email, `http://localhost:3000/resetPassword?token=${token}`);
       res.status(200);
       res.send({ status: 'Sent token to email' });

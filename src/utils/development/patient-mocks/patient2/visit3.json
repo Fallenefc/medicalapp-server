@@ -1,0 +1,29 @@
+{
+	"date": "3",
+	"patientId": "2c285291-7c38-47b8-acc0-9f0db08bf47e",
+	"snapshots": [
+  {
+    "measurementValue": 7,
+    "measurement": "hba1c"
+  },
+  {
+    "measurementValue": 450,
+    "measurement": "proteinuria"
+  },
+  {
+    "measurementValue": 109,
+    "measurement": "glucose"
+  },
+  {
+    "measurementValue": 2.5,
+    "measurement": "creatinine"
+  }
+],
+	"flags": [
+  {
+    "title": "Condition: Renal Failure",
+    "description": "actute renal failure",
+		"type": "severe"
+  }
+]
+}

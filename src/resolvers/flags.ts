@@ -1,10 +1,10 @@
 /* eslint-disable class-methods-use-this */
 import { Response } from 'express';
 import { AuthRequest } from './providers';
-import Warning from '../entities/Warning';
+import Flag from '../entities/Flag';
 
-class WarningResolvers {
-  async createWarning(req: AuthRequest, res: Response) {
+class FlagResolvers {
+  async createFlag(req: AuthRequest, res: Response) {
     try {
       const {
         title, description, date, type, patient,
@@ -12,7 +12,7 @@ class WarningResolvers {
 
       if (!title || !description || !date || !type || !patient) throw new Error('Missing params');
 
-      const warning = await Warning.create({
+      const flag = await Flag.create({
         title,
         description,
         date,
@@ -20,19 +20,19 @@ class WarningResolvers {
         patient,
       })
         .save();
-      return res.status(200).send(warning);
+      return res.status(200).send(flag);
     } catch (err) {
-      console.error(`Something is wrong ghen creatingetting patients ${err}`);
+      console.error(`Something is wrong adding flag: ${err}`);
       return res.status(400);
     }
   }
 
-  async patientGetAllWarnings(req: AuthRequest, res: Response) {
+  async patientGetAllFlags(req: AuthRequest, res: Response) {
     try {
       // TODO: Make a check if the provider actually has the patient as his patient
       const { patientId } = req.params;
-      const patientWarnings = await Warning.find({ where: { patient: patientId } });
-      return res.status(200).send(patientWarnings);
+      const patientFlags = await Flag.find({ where: { patient: patientId } });
+      return res.status(200).send(patientFlags);
     } catch (err) {
       console.error(`error: ${err}`);
       return res.status(400);
@@ -40,4 +40,4 @@ class WarningResolvers {
   }
 }
 
-export default WarningResolvers;
+export default FlagResolvers;
