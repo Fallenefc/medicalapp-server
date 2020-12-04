@@ -28,7 +28,7 @@ app.use(router);
   try {
     await createConnection({
       type: 'postgres',
-      host: 'localhost',
+      host: 'db',
       port: 5432,
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,

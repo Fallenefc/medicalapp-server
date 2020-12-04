@@ -45,6 +45,7 @@ class ProvidersResolvers {
     }
   }
 
+  // TODO: send the same info as login
   async login(req: Request, res: Response) {
     const { email, password } = req.body;
 
