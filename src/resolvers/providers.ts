@@ -31,7 +31,6 @@ class ProvidersResolvers {
           email,
           password: hashedPass,
           name,
-          title,
           verified: false,
         })
           .save();
@@ -68,7 +67,6 @@ class ProvidersResolvers {
       const isValid = await bcrypt.compare(password, provider.password);
       if (!isValid) throw new Error('Passwords do not match');
 
-      console.log(process.env.TOKEN_EXPIRATION);
       const token = jwt.sign({ id: provider.id }, process.env.SECRET_KEY, {
         expiresIn: process.env.TOKEN_EXPIRATION || 86400, // 1 day
       });
@@ -80,7 +78,6 @@ class ProvidersResolvers {
           email: provider.email,
           name: provider.name,
           id: provider.id,
-          title: provider.title,
         },
         token,
       });
@@ -162,7 +159,6 @@ class ProvidersResolvers {
     try {
       const { token } = req.params;
       if (!token) throw new Error('Missing token');
-      console.log(process.env.SECRET_KEY_VERIFY);
       const jwtCheck: any = jwt.verify(token, process.env.SECRET_KEY_VERIFY);
       await getConnection()
         .createQueryBuilder()

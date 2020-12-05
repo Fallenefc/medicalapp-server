@@ -25,9 +25,6 @@ class Provider extends BaseEntity {
   name: string;
 
   @Column()
-  title: string;
-
-  @Column()
   verified: boolean;
 
   @CreateDateColumn()

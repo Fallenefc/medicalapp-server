@@ -15,7 +15,6 @@ class PatientResolvers {
       const linkedProvider: Provider = await Provider.findOne(req.user.id);
       const patient: Patient = await Patient.create({
         uniqueId,
-        title,
         firstName,
         lastName,
         email,

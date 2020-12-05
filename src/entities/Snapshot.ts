@@ -14,7 +14,7 @@ class Snapshot extends BaseEntity {
 
   // Change back to date, this is just for testing
   @Column()
-  date: string;
+  date: Date;
 
   @Column({ type: 'float' })
   measurementValue: number;
