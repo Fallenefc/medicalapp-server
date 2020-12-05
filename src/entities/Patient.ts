@@ -5,9 +5,9 @@ import {
 import Provider from './Provider';
 import Snapshot from './Snapshot';
 import Flag from './Flag';
-import FamilyHistory from './FamilyHistory';
-import Note from './Note';
-import Problem from './Problems';
+import FamilyHistory from './patientHistory/FamilyHistory';
+import Note from './patientHistory/Note';
+import Problem from './patientHistory/Problems';
 
 @Entity()
 class Patient extends BaseEntity {

@@ -6,6 +6,7 @@ import MeasurementsResolvers from './resolvers/measurement';
 import PatientResolvers from './resolvers/patients';
 import ProvidersResolvers from './resolvers/providers';
 import FlagResolvers from './resolvers/flags';
+import PatientHistoryResolvers from './resolvers/patientHistory';
 
 const router = express.Router();
 
@@ -15,6 +16,7 @@ const MeasurementControllersDev = new MeasurementResolverDev();
 const SnapshotControllers = new SnapshotResolvers();
 const MeasurementControllers = new MeasurementsResolvers();
 const FlagControllers = new FlagResolvers();
+const PatientHistoryControllers = new PatientHistoryResolvers();
 
 // Login and Signup
 router.post('/signup', ProviderControllers.register);
@@ -44,6 +46,16 @@ router.post('/addSnapAndFlag', authMiddleware, SnapshotControllers.createManySna
 
 // Get Measurements
 router.get('/measurements', MeasurementControllers.getMeasurements);
+
+// Patient History Routes
+router.post('/family', authMiddleware, PatientHistoryControllers.createFamilyHistory);
+router.get('/family/:patientId', authMiddleware, PatientHistoryControllers.getFamilyHistory);
+
+router.post('/note', authMiddleware, PatientHistoryControllers.createNote);
+router.get('/notes/:patientId', authMiddleware, PatientHistoryControllers.getNotes);
+
+router.post('/problem', authMiddleware, PatientHistoryControllers.createProblem);
+router.get('/problems/:patientId', authMiddleware, PatientHistoryControllers.getProblems);
 
 //
 //

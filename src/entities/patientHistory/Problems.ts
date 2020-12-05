@@ -3,15 +3,15 @@ import {
   ManyToOne,
   BaseEntity,
 } from 'typeorm';
-import Patient from './Patient';
+import Patient from '../Patient';
 
 @Entity()
-class FamilyHistory extends BaseEntity {
+class Problem extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column()
-  condition: string;
+  problem: string;
 
   @CreateDateColumn()
   createdAt: Date;
@@ -19,8 +19,8 @@ class FamilyHistory extends BaseEntity {
   @UpdateDateColumn()
   updatedAt: Date;
 
-  @ManyToOne(() => Patient, (patient: Patient) => patient.familyHistory)
+  @ManyToOne(() => Patient, (patient: Patient) => patient.problem)
   patient: Patient;
 }
 
-export default FamilyHistory;
+export default Problem;

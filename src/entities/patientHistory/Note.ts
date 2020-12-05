@@ -3,7 +3,7 @@ import {
   ManyToOne,
   BaseEntity,
 } from 'typeorm';
-import Patient from './Patient';
+import Patient from '../Patient';
 
 @Entity()
 class Note extends BaseEntity {
