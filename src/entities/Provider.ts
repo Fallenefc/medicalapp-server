@@ -28,7 +28,7 @@ class Provider extends BaseEntity {
   title: string;
 
   @Column()
-  resetPassword: string;
+  verified: boolean;
 
   @CreateDateColumn()
   createdAt: Date;

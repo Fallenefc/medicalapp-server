@@ -25,9 +25,9 @@ const authMiddleware = async (req: AuthRequest, res: Response, next: any) => {
     if (!user) throw new Error('Invalid user');
     req.user = user;
     next();
-  } catch (err) {
-    console.error(err);
-    res.sendStatus(403);
+  } catch (error) {
+    console.error(`Unauthorized route use: ${error}`);
+    res.status(403).json({ error: 'Unauthorized' });
   }
 };
 

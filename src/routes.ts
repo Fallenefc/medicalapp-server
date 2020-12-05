@@ -22,6 +22,7 @@ router.post('/login', ProviderControllers.login);
 router.get('/me', authMiddleware, ProviderControllers.profile);
 router.post('/forgotPassword', ProviderControllers.forgotPassword);
 router.post('/resetPassword', ProviderControllers.resetPassword);
+router.get('/verify/:token', ProviderControllers.verify);
 
 // Patient Routes
 router.post('/patients', authMiddleware, PatientControllers.addPatient);

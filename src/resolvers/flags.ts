@@ -4,6 +4,7 @@ import { AuthRequest } from './providers';
 import Flag from '../entities/Flag';
 
 class FlagResolvers {
+  // deprecated
   async createFlag(req: AuthRequest, res: Response) {
     try {
       const {
@@ -21,9 +22,9 @@ class FlagResolvers {
       })
         .save();
       return res.status(200).send(flag);
-    } catch (err) {
-      console.error(`Something is wrong adding flag: ${err}`);
-      return res.status(400);
+    } catch (error) {
+      console.error(`Something is wrong adding flag: ${error}`);
+      return res.status(400).json({ error });
     }
   }
 
@@ -33,9 +34,9 @@ class FlagResolvers {
       const { patientId } = req.params;
       const patientFlags = await Flag.find({ where: { patient: patientId } });
       return res.status(200).send(patientFlags);
-    } catch (err) {
-      console.error(`error: ${err}`);
-      return res.status(400);
+    } catch (error) {
+      console.error(`Something is wrong getting flags: ${error}`);
+      return res.status(400).json({ error });
     }
   }
 }

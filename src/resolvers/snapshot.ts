@@ -6,7 +6,7 @@ import Snapshot from '../entities/Snapshot';
 import Flag from '../entities/Flag';
 
 class SnapshotResolvers {
-  // most likely delete this
+  // deprecated
   async createSnapshot(req: AuthRequest, res: Response) {
     try {
       const {
@@ -24,13 +24,13 @@ class SnapshotResolvers {
       })
         .save();
       return res.status(200).send(snapshot);
-    } catch (err) {
-      console.error(`Something is wrong creating a snapshot ${err}`);
-      return res.status(400);
+    } catch (error) {
+      console.error(`Something is wrong creating a snapshot: ${error}`);
+      return res.status(400).json({ error });
     }
   }
 
-  // most likely delete this
+  // deprecated
   async createManySnapshots(req: AuthRequest, res: Response) {
     try {
       const provider = req.user;
@@ -46,15 +46,12 @@ class SnapshotResolvers {
         return singleSnapshot;
       }));
       return res.status(200).send(snapshotsArray);
-    } catch (err) {
-      console.error(err);
-      return res.status(400);
+    } catch (error) {
+      console.error(`Something is wrong creating many snapshots: ${error}`);
+      return res.status(400).json({ error });
     }
   }
 
-  // This is a test route to add multiple snapshots and flags at once;
-  // So you dont have to make multiple front-end requests.
-  // Also returns both snapshots and flags to store on front-end state.
   async createManySnapshotsAndFlags(req: AuthRequest, res: Response) {
     try {
       const provider = req.user;
@@ -88,19 +85,20 @@ class SnapshotResolvers {
         snapshots: snapshotsArray,
         flags: flagsArray,
       });
-    } catch (err) {
-      console.error(err);
-      return res.status(400);
+    } catch (error) {
+      console.error(`Something is wrong adding flags and snapshots: ${error}`);
+      return res.status(400).json({ error });
     }
   }
 
+  // deprecated
   async getAllProviderSnapshots(req: AuthRequest, res: Response) {
     try {
       const snapshots: Snapshot[] = await Snapshot.find({ where: { providerId: req.user.id } });
       return res.status(200).send(snapshots);
-    } catch (err) {
-      console.error(`error: ${err}`);
-      return res.status(400);
+    } catch (error) {
+      console.error(`Something is wrong getting snapshots: ${error}`);
+      return res.status(400).json({ error });
     }
   }
 
@@ -110,9 +108,9 @@ class SnapshotResolvers {
       const { patientId } = req.params;
       const patientSnapshots: Snapshot[] = await Snapshot.find({ where: { patient: patientId }, relations: ['measurement'] });
       return res.status(200).send(patientSnapshots);
-    } catch (err) {
-      console.error(`error: ${err}`);
-      return res.status(400);
+    } catch (error) {
+      console.error(`Something is wrong getting patient snapshots: ${error}`);
+      return res.status(400).json({ error });
     }
   }
 }
