@@ -17,6 +17,9 @@ class Measurement extends BaseEntity {
   @Column({ type: 'float' })
   maxValue: number;
 
+  @Column()
+  unit: string;
+
   @CreateDateColumn()
   createdAt: Date;
 

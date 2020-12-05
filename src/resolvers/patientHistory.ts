@@ -21,7 +21,7 @@ class PatientHistoryResolvers {
       return res.status(200).send(createdNote);
     } catch (error) {
       console.error(`Something is wrong adding a note: ${error}`);
-      return res.status(400).json({ error });
+      return res.status(400).json({ error: 'Something is wrong adding a note' });
     }
   }
 
@@ -33,7 +33,7 @@ class PatientHistoryResolvers {
       return res.status(200).send(patientNotes);
     } catch (error) {
       console.error(`Something is wrong getting notes: ${error}`);
-      return res.status(400).json({ error });
+      return res.status(400).json({ error: 'Something is wrong getting notes' });
     }
   }
 
@@ -52,7 +52,7 @@ class PatientHistoryResolvers {
       return res.status(200).send(createdFamilyHistory);
     } catch (error) {
       console.error(`Something is wrong adding a note: ${error}`);
-      return res.status(400).json({ error });
+      return res.status(400).json({ error: 'Something is wrong adding a note' });
     }
   }
 
@@ -64,7 +64,7 @@ class PatientHistoryResolvers {
       return res.status(200).send(patientFamilyHistory);
     } catch (error) {
       console.error(`Something is wrong getting notes: ${error}`);
-      return res.status(400).json({ error });
+      return res.status(400).json({ error: 'Something is wrong getting notes' });
     }
   }
 
@@ -83,7 +83,7 @@ class PatientHistoryResolvers {
       return res.status(200).send(createdProblem);
     } catch (error) {
       console.error(`Something is wrong adding a note: ${error}`);
-      return res.status(400).json({ error });
+      return res.status(400).json({ error: 'Something is wrong adding a note' });
     }
   }
 
@@ -94,8 +94,8 @@ class PatientHistoryResolvers {
       const patientProblems = await Problem.find({ where: { patient: patientId } });
       return res.status(200).send(patientProblems);
     } catch (error) {
-      console.error(`Something is wrong getting notes: ${error}`);
-      return res.status(400).json({ error });
+      console.error(`Something is wrong getting problems: ${error}`);
+      return res.status(400).json({ error: 'Something is wrong getting problems' });
     }
   }
 }

@@ -7,6 +7,7 @@ import PatientResolvers from './resolvers/patients';
 import ProvidersResolvers from './resolvers/providers';
 import FlagResolvers from './resolvers/flags';
 import PatientHistoryResolvers from './resolvers/patientHistory';
+import test from './resolvers/dev/dataSet';
 
 const router = express.Router();
 
@@ -62,6 +63,8 @@ router.get('/problems/:patientId', authMiddleware, PatientHistoryControllers.get
 // DEVELOPMENT ROUTES
 //
 //
+
+router.get('/test/:patientId', test);
 
 // // Measurement Route (this is just for development)
 router.post('/measurement', MeasurementControllersDev.createMeasurement);

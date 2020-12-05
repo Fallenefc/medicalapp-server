@@ -3,7 +3,8 @@
 ## R: Front-end refactoring necessary
 
 - /me now sends token as object (R: 3000/4000)
-- Added email verification (R: 3000)
+- Added email verification (disabled by default on development)
 - Returning JSON on 400 statuses
 - Removed title from patients and providers (R: 3000/4000)
 - Added real date format on the backend (YYYY/MM/DD)
+- Added measurement units as a columns (R: 4000)

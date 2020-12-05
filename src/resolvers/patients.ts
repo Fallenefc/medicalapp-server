@@ -35,7 +35,7 @@ class PatientResolvers {
       });
     } catch (error) {
       console.error(`Something is wrong adding patient: ${error}`);
-      return res.status(400).json({ error });
+      return res.status(400).json({ error: 'Something is wrong adding patient' });
     }
   }
 
@@ -51,7 +51,7 @@ class PatientResolvers {
       return res.status(200).send(patients);
     } catch (error) {
       console.error(`Something is wrong getting all patients: ${error}`);
-      return res.status(400).json({ error });
+      return res.status(400).json({ error: 'Something is wrong getting all patients' });
     }
   }
 }

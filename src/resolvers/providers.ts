@@ -71,7 +71,7 @@ class ProvidersResolvers {
         expiresIn: process.env.TOKEN_EXPIRATION || 86400, // 1 day
       });
 
-      if (!provider.verified) throw new Error('Email not verified');
+      if (!provider.verified && process.env.IS_PROD === 'true') throw new Error('Email not verified');
 
       return res.status(200).json({
         user: {
@@ -107,7 +107,7 @@ class ProvidersResolvers {
       });
     } catch (error) {
       console.error(`Something is wrong fetching user profile: ${error}`);
-      res.status(400).json({ error });
+      res.status(400).json({ error: 'Forbidden' });
     }
   }
 
@@ -130,7 +130,7 @@ class ProvidersResolvers {
       res.send({ status: 'Sent token to email' });
     } catch (error) {
       console.error(`Something is wrong trying to reset password: ${error}`);
-      res.status(400).json({ error });
+      res.status(400).json({ error: 'Forbidden' });
     }
   }
 
@@ -151,7 +151,7 @@ class ProvidersResolvers {
       });
     } catch (error) {
       console.error(`Something is wrong trying to reset password: ${error}`);
-      res.status(400).json({ error });
+      res.status(400).json({ error: 'Forbidden' });
     }
   }
 
@@ -170,7 +170,7 @@ class ProvidersResolvers {
       res.sendStatus(200);
     } catch (error) {
       console.error(`Something is wrong verifying email: ${error}`);
-      res.status(400).json({ error });
+      res.status(400).json({ error: 'Forbidden' });
     }
   }
 }
