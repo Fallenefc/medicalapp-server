@@ -32,13 +32,9 @@ router.post('/patients', authMiddleware, PatientControllers.addPatient);
 router.get('/patients', authMiddleware, PatientControllers.getAllPatients);
 
 // Snapshot Routes
-router.post('/snapshot', authMiddleware, SnapshotControllers.createSnapshot);
-router.get('/snapshot', authMiddleware, SnapshotControllers.getAllProviderSnapshots); // only in dev mode
 router.get('/snapshots/:patientId', authMiddleware, SnapshotControllers.patientGetAllSnapshots);
-router.post('/manySnapshots', authMiddleware, SnapshotControllers.createManySnapshots);
 
 // Flag Routes
-router.post('/flag', authMiddleware, FlagControllers.createFlag);
 router.get('/flags/:patientId', authMiddleware, FlagControllers.patientGetAllFlags);
 
 // Hybrid Snapshot and Flag route
