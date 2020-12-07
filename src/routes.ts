@@ -7,7 +7,6 @@ import PatientResolvers from './resolvers/patients';
 import ProvidersResolvers from './resolvers/providers';
 import FlagResolvers from './resolvers/flags';
 import PatientHistoryResolvers from './resolvers/patientHistory';
-import test from './resolvers/dev/dataSet';
 
 const router = express.Router();
 
@@ -40,6 +39,8 @@ router.get('/flags/:patientId', authMiddleware, FlagControllers.patientGetAllFla
 // Hybrid Snapshot and Flag route
 // This will add both snapshots and Flag on a single date:
 router.post('/addSnapAndFlag', authMiddleware, SnapshotControllers.createManySnapshotsAndFlags);
+// And this will get both snapshots and flags for all dates, already in formatted way
+router.get('/getSnapsAndFlags/:patientId', authMiddleware, SnapshotControllers.getSnapsAndFlags);
 
 // Get Measurements
 router.get('/measurements', MeasurementControllers.getMeasurements);
@@ -59,8 +60,6 @@ router.get('/problems/:patientId', authMiddleware, PatientHistoryControllers.get
 // DEVELOPMENT ROUTES
 //
 //
-
-router.get('/test/:patientId', test);
 
 // // Measurement Route (this is just for development)
 router.post('/measurement', MeasurementControllersDev.createMeasurement);

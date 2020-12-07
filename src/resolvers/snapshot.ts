@@ -56,6 +56,49 @@ class SnapshotResolvers {
       return res.status(400).json({ error: 'Something is wrong getting patient snapshots' });
     }
   }
+
+  async getSnapsAndFlags(req: AuthRequest, res: Response) {
+    try {
+      const { patientId } = req.params;
+      const patientSnapshots: Snapshot[] = await Snapshot.find({ where: { patient: patientId }, relations: ['measurement'] });
+      const patientFlags: Flag[] = await Flag.find({ where: { patient: patientId } });
+      const dates: any = {};
+      patientSnapshots.forEach((snap: any) => {
+        const { date } = snap;
+        const snapshot = {
+          marker: snap.measurementValue,
+          name: snap.measurement.name,
+        };
+        // eslint-disable-next-line no-prototype-builtins
+        if (dates.hasOwnProperty(date)) dates[date].snapshots = [...dates[date].snapshots, snapshot];
+        else {
+          dates[date] = {
+            snapshots: [snapshot],
+            flags: [],
+          };
+        }
+      });
+      patientFlags.forEach((flag: any) => {
+        const { date } = flag;
+        const currentFlag = {
+          title: flag.title,
+          description: flag.title,
+          type: flag.type,
+        };
+        // eslint-disable-next-line no-prototype-builtins
+        if (dates.hasOwnProperty(date)) dates[date].flags = [...dates[date].flags, currentFlag];
+        else {
+          dates[date] = {
+            snapshots: [],
+            flags: [currentFlag],
+          };
+        }
+      });
+      res.status(200).json(dates);
+    } catch (err) {
+      res.status(400).json({ error: 'Failure trying to fetch data' });
+    }
+  }
 }
 
 export default SnapshotResolvers;
