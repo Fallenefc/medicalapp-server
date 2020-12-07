@@ -15,7 +15,6 @@ class PatientResolvers {
       const linkedProvider: Provider = await Provider.findOne(req.user.id);
       const patient: Patient = await Patient.create({
         uniqueId,
-        title,
         firstName,
         lastName,
         email,
@@ -30,12 +29,13 @@ class PatientResolvers {
         .relation(Provider, 'patients')
         .of(linkedProvider)
         .add(patient);
-      res.status(200).send({
+      return res.status(200).send({
         ...patient,
         provider: linkedProvider.id,
       });
-    } catch (err) {
-      res.status(400).send(`Problem adding patient ${err}`);
+    } catch (error) {
+      console.error(`Something is wrong adding patient: ${error}`);
+      return res.status(400).json({ error: 'Something is wrong adding patient' });
     }
   }
 
@@ -48,9 +48,10 @@ class PatientResolvers {
         // just have to use the same on the first param of where
         .where('providers.id = :providerId', { providerId: req.user.id })
         .getMany();
-      res.status(200).send(patients);
-    } catch (err) {
-      res.status(400).send(`Problem fetching patient data ${err}`);
+      return res.status(200).send(patients);
+    } catch (error) {
+      console.error(`Something is wrong getting all patients: ${error}`);
+      return res.status(400).json({ error: 'Something is wrong getting all patients' });
     }
   }
 }

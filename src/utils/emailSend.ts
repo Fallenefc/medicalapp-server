@@ -1,14 +1,17 @@
 import nodemailer from 'nodemailer';
+import dotenv from 'dotenv';
 import smptConfig from './smtp';
+
+dotenv.config();
 
 const sendEmail = async (receiver: string, content: string) => {
   try {
     const transporter = nodemailer.createTransport(smptConfig);
 
     const info = await transporter.sendMail({
-      from: '"Bloodworks" <bloodworksapp@gmail.com>',
+      from: `"${process.env.GMAIL_NAME}" <${process.env.GMAIL}>`,
       to: receiver,
-      bcc: 'bloodworksapp@gmail.com', // delete before production
+      bcc: `${process.env.GMAIL}`, // delete before production
       subject: 'Change password',
       html: content,
     });

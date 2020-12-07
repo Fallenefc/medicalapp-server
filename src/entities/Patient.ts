@@ -5,6 +5,9 @@ import {
 import Provider from './Provider';
 import Snapshot from './Snapshot';
 import Flag from './Flag';
+import FamilyHistory from './patientHistory/FamilyHistory';
+import Note from './patientHistory/Note';
+import Problem from './patientHistory/Problems';
 
 @Entity()
 class Patient extends BaseEntity {
@@ -13,9 +16,6 @@ class Patient extends BaseEntity {
 
   @Column({ unique: true })
   uniqueId: string;
-
-  @Column()
-  title: string;
 
   @Column()
   firstName: string;
@@ -27,7 +27,7 @@ class Patient extends BaseEntity {
   email: string | null;
 
   @Column()
-  DoB: string;
+  DoB: Date;
 
   @Column()
   sex: number;
@@ -49,6 +49,15 @@ class Patient extends BaseEntity {
 
   @OneToMany(() => Snapshot, (snapshot) => snapshot.patient)
   snapshot: Snapshot[];
+
+  @OneToMany(() => FamilyHistory, (familyHistory) => familyHistory.patient)
+  familyHistory: FamilyHistory[];
+
+  @OneToMany(() => Note, (note) => note.patient)
+  note: Note[];
+
+  @OneToMany(() => Problem, (problem) => problem.patient)
+  problem: Problem[];
 
   @OneToMany(() => Flag, (flag) => flag.patient)
   flag: Flag[];

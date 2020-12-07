@@ -1,11 +1,14 @@
 import jwt from 'jsonwebtoken';
 import { Request, Response } from 'express';
+import dotenv from 'dotenv';
 import { getManager } from 'typeorm';
 import Provider from '../entities/Provider';
 
 interface AuthRequest extends Request {
   user: Provider;
 }
+
+dotenv.config();
 
 const authMiddleware = async (req: AuthRequest, res: Response, next: any) => {
   try {
@@ -22,9 +25,9 @@ const authMiddleware = async (req: AuthRequest, res: Response, next: any) => {
     if (!user) throw new Error('Invalid user');
     req.user = user;
     next();
-  } catch (err) {
-    console.error(err);
-    res.sendStatus(403);
+  } catch (error) {
+    console.error(`Unauthorized route use: ${error}`);
+    res.status(403).json({ error: 'Unauthorized' });
   }
 };
 

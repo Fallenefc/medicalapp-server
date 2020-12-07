@@ -6,55 +6,6 @@ import Snapshot from '../entities/Snapshot';
 import Flag from '../entities/Flag';
 
 class SnapshotResolvers {
-  // most likely delete this
-  async createSnapshot(req: AuthRequest, res: Response) {
-    try {
-      const {
-        date, measurementValue, measurementName, patientId,
-      } = req.body;
-      if (!date || !measurementValue || !measurementName || !patientId) throw new Error('Missing params');
-      const provider = req.user;
-
-      const snapshot = await Snapshot.create({
-        date,
-        measurementValue,
-        measurement: measurementName,
-        patient: patientId,
-        providerId: provider.id,
-      })
-        .save();
-      return res.status(200).send(snapshot);
-    } catch (err) {
-      console.error(`Something is wrong creating a snapshot ${err}`);
-      return res.status(400);
-    }
-  }
-
-  // most likely delete this
-  async createManySnapshots(req: AuthRequest, res: Response) {
-    try {
-      const provider = req.user;
-      const snapshotsArray = await Promise.all(req.body.snapshots.map(async (snapshot: Snapshot) => {
-        const singleSnapshot: Snapshot = Snapshot.create({
-          date: req.body.date,
-          measurementValue: snapshot.measurementValue,
-          measurement: snapshot.measurement,
-          patient: req.body.patientId,
-          providerId: provider.id,
-        });
-        await singleSnapshot.save();
-        return singleSnapshot;
-      }));
-      return res.status(200).send(snapshotsArray);
-    } catch (err) {
-      console.error(err);
-      return res.status(400);
-    }
-  }
-
-  // This is a test route to add multiple snapshots and flags at once;
-  // So you dont have to make multiple front-end requests.
-  // Also returns both snapshots and flags to store on front-end state.
   async createManySnapshotsAndFlags(req: AuthRequest, res: Response) {
     try {
       const provider = req.user;
@@ -88,19 +39,9 @@ class SnapshotResolvers {
         snapshots: snapshotsArray,
         flags: flagsArray,
       });
-    } catch (err) {
-      console.error(err);
-      return res.status(400);
-    }
-  }
-
-  async getAllProviderSnapshots(req: AuthRequest, res: Response) {
-    try {
-      const snapshots: Snapshot[] = await Snapshot.find({ where: { providerId: req.user.id } });
-      return res.status(200).send(snapshots);
-    } catch (err) {
-      console.error(`error: ${err}`);
-      return res.status(400);
+    } catch (error) {
+      console.error(`Something is wrong adding flags and snapshots: ${error}`);
+      return res.status(400).json({ error: 'Something is wrong adding flags and snapshots' });
     }
   }
 
@@ -110,9 +51,52 @@ class SnapshotResolvers {
       const { patientId } = req.params;
       const patientSnapshots: Snapshot[] = await Snapshot.find({ where: { patient: patientId }, relations: ['measurement'] });
       return res.status(200).send(patientSnapshots);
+    } catch (error) {
+      console.error(`Something is wrong getting patient snapshots: ${error}`);
+      return res.status(400).json({ error: 'Something is wrong getting patient snapshots' });
+    }
+  }
+
+  async getSnapsAndFlags(req: AuthRequest, res: Response) {
+    try {
+      const { patientId } = req.params;
+      const patientSnapshots: Snapshot[] = await Snapshot.find({ where: { patient: patientId }, relations: ['measurement'] });
+      const patientFlags: Flag[] = await Flag.find({ where: { patient: patientId } });
+      const dates: any = {};
+      patientSnapshots.forEach((snap: any) => {
+        const { date } = snap;
+        const snapshot = {
+          marker: snap.measurementValue,
+          name: snap.measurement.name,
+        };
+        // eslint-disable-next-line no-prototype-builtins
+        if (dates.hasOwnProperty(date)) dates[date].snapshots = [...dates[date].snapshots, snapshot];
+        else {
+          dates[date] = {
+            snapshots: [snapshot],
+            flags: [],
+          };
+        }
+      });
+      patientFlags.forEach((flag: any) => {
+        const { date } = flag;
+        const currentFlag = {
+          title: flag.title,
+          description: flag.title,
+          type: flag.type,
+        };
+        // eslint-disable-next-line no-prototype-builtins
+        if (dates.hasOwnProperty(date)) dates[date].flags = [...dates[date].flags, currentFlag];
+        else {
+          dates[date] = {
+            snapshots: [],
+            flags: [currentFlag],
+          };
+        }
+      });
+      res.status(200).json(dates);
     } catch (err) {
-      console.error(`error: ${err}`);
-      return res.status(400);
+      res.status(400).json({ error: 'Failure trying to fetch data' });
     }
   }
 }

@@ -16,7 +16,7 @@ class Flag extends BaseEntity {
 
   // Change later to date type!
   @Column()
-  date: string;
+  date: Date;
 
   // Store by HEX? Or by type string?
   @Column()
