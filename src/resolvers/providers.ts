@@ -17,9 +17,9 @@ class ProvidersResolvers {
   async register(req: Request, res: Response) {
     try {
       const {
-        email, password, name, title,
+        email, password, name,
       } = req.body;
-      if (!email || !password || !name || !title) throw new Error('Missing params');
+      if (!email || !password || !name) throw new Error('Missing params');
       bcrypt.hash(password, 10, async (err, hashedPass) => {
         if (err) {
           res.json({
