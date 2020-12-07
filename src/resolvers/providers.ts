@@ -38,7 +38,7 @@ class ProvidersResolvers {
           expiresIn: 800000000000000, // change that later to never expires;
         });
 
-        sendEmail(req.body.email, `${process.env.LANDING_URL || 'http://localhost:3000'}/verify?token=${token}`);
+        if (process.env.IS_PROD === 'true') sendEmail(req.body.email, `${process.env.LANDING_URL || 'http://localhost:3000'}/verify?token=${token}`);
 
         console.log(`Added to database: ${JSON.stringify(provider)}`);
         return res.status(200).send({
