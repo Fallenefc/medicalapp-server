@@ -67,5 +67,6 @@ router.post('/measurement', MeasurementControllersDev.createMeasurement);
 // USE THE FOLLOWING ROUTE ONLY ONCE TO POPULATE YOUR MEASUREMENTS TABLE!!
 // REMOVE THIS IN PRODUCTION
 router.post('/populateMeasurements', MeasurementControllersDev.populateData);
+router.post('/getVisit', authMiddleware, SnapshotControllers.getVisit);
 
 export default router;

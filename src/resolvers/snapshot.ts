@@ -1,6 +1,7 @@
 /* eslint-disable no-prototype-builtins */
 /* eslint-disable max-len */
 /* eslint-disable class-methods-use-this */
+import { classToPlain } from 'class-transformer';
 import { Response } from 'express';
 import { AuthRequest } from './providers';
 import Snapshot from '../entities/Snapshot';
@@ -124,6 +125,33 @@ class SnapshotResolvers {
       });
     } catch (err) {
       res.status(400).json({ error: 'Failure trying to fetch data' });
+    }
+  }
+
+  async getVisit(req: AuthRequest, res: Response) {
+    try {
+      const { patientId, date } = req.body;
+      const visitSnapshots: any = await Snapshot.find({ where: { patient: patientId, date }, relations: ['measurement'] });
+      const visitFlags = await Flag.find({ patient: patientId, date });
+      const transformedSnapshots = visitSnapshots.map((test: any) => classToPlain(test));
+      const transformedFlags = visitFlags.map((test: any) => classToPlain(test));
+
+      const snapshots = transformedSnapshots.map((snap: any) => ({
+        name: snap.measurement.name,
+        marker: snap.measurementValue,
+      }));
+      const flags = transformedFlags.map((flag) => ({
+        title: flag.title,
+        description: flag.description,
+        type: flag.type,
+      }));
+      res.status(200).json({
+        snapshots,
+        flags,
+      });
+    } catch (err) {
+      console.error(err);
+      res.status(400).json({ error: 'Problem getting visits from a patient' });
     }
   }
 }
