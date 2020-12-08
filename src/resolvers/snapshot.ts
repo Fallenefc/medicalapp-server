@@ -1,3 +1,4 @@
+/* eslint-disable no-prototype-builtins */
 /* eslint-disable max-len */
 /* eslint-disable class-methods-use-this */
 import { Response } from 'express';
@@ -57,25 +58,48 @@ class SnapshotResolvers {
     }
   }
 
+  // sorry this is a huge piece of spaghetti
   async getSnapsAndFlags(req: AuthRequest, res: Response) {
     try {
       const { patientId } = req.params;
       const patientSnapshots: Snapshot[] = await Snapshot.find({ where: { patient: patientId }, relations: ['measurement'] });
       const patientFlags: Flag[] = await Flag.find({ where: { patient: patientId } });
       const dates: any = {};
+      const lineGraph: any = {};
       patientSnapshots.forEach((snap: any) => {
         const { date } = snap;
         const snapshot = {
           marker: snap.measurementValue,
           name: snap.measurement.name,
         };
-        // eslint-disable-next-line no-prototype-builtins
         if (dates.hasOwnProperty(date)) dates[date].snapshots = [...dates[date].snapshots, snapshot];
         else {
           dates[date] = {
             snapshots: [snapshot],
             flags: [],
           };
+        }
+        const staticData = {
+          measures: [snap.measurement.minValue, snap.measurement.maxValue],
+          title: snap.measurement.name,
+          ranges: [snap.measurement.minValue / 2, snap.measurement.maxValue * 2],
+        };
+        if (lineGraph.hasOwnProperty(snap.measurement.id)) {
+          lineGraph[snap.measurement.id] = [
+            ...lineGraph[snap.measurement.id],
+            {
+              ...staticData,
+              marker: snap.measurementValue,
+              date: snap.date,
+            },
+          ];
+        }
+        if (!lineGraph.hasOwnProperty(snap.measurement.id)) {
+          lineGraph[snap.measurement.id] = [{
+            ...staticData,
+            marker: snap.measurementValue,
+            date: snap.date,
+          }];
         }
       });
       patientFlags.forEach((flag: any) => {
@@ -94,7 +118,10 @@ class SnapshotResolvers {
           };
         }
       });
-      res.status(200).json(dates);
+      res.status(200).json({
+        dates,
+        lineGraph,
+      });
     } catch (err) {
       res.status(400).json({ error: 'Failure trying to fetch data' });
     }

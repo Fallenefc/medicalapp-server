@@ -19,7 +19,7 @@ dotenv.config();
 const app = express();
 
 const corsConfig = {
-  origin: [process.env.FRONTEND_URL, process.env.LANDING_URL],
+  origin: [process.env.FRONTEND_URL, process.env.LANDING_URL, 'http://localhost:4000'],
   credentials: true, // this is for allowing cookies
 };
 
