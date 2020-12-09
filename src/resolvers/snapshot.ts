@@ -66,7 +66,7 @@ class SnapshotResolvers {
       const patientSnapshots: Snapshot[] = await Snapshot.find({ where: { patient: patientId }, relations: ['measurement'] });
       const patientFlags: Flag[] = await Flag.find({ where: { patient: patientId } });
 
-      const dates: any = {};
+      const flags: any = [];
       const lineGraph: any = {};
       const bulletGraph: any = [];
 
@@ -76,13 +76,6 @@ class SnapshotResolvers {
           marker: snap.measurementValue,
           name: snap.measurement.name,
         };
-        if (dates.hasOwnProperty(date)) dates[date].snapshots = [...dates[date].snapshots, snapshot];
-        else {
-          dates[date] = {
-            snapshots: [snapshot],
-            flags: [],
-          };
-        }
         const index = bulletGraph.findIndex((el: any) => `${el.date}` === `${date}`);
         if (index >= 0) {
           bulletGraph[index].snapshots = [...bulletGraph[index].snapshots, snapshot];
@@ -95,9 +88,7 @@ class SnapshotResolvers {
         }
         // line graphs
         const staticData = {
-          measures: [snap.measurement.minValue, snap.measurement.maxValue],
-          title: snap.measurement.name,
-          ranges: [snap.measurement.minValue / 2, snap.measurement.maxValue * 2],
+          name: snap.measurement.name,
         };
         if (lineGraph.hasOwnProperty(snap.measurement.id)) {
           lineGraph[snap.measurement.id] = [
@@ -124,19 +115,22 @@ class SnapshotResolvers {
           description: flag.title,
           type: flag.type,
         };
-        // eslint-disable-next-line no-prototype-builtins
-        if (dates.hasOwnProperty(date)) dates[date].flags = [...dates[date].flags, currentFlag];
-        else {
-          dates[date] = {
-            snapshots: [],
-            flags: [currentFlag],
-          };
+        const index = flags.findIndex((el: any) => `${el.date}` === `${date}`);
+        if (index >= 0) {
+          flags[index].snapshots = [...flags[index].flags, currentFlag];
         }
+        if (index < 0) {
+          flags.push({
+            flags: [currentFlag],
+            date,
+          });
+        }
+        // eslint-disable-next-line no-prototype-builtins
       });
       res.status(200).json({
-        dates,
         lineGraph,
         bulletGraph,
+        flags,
       });
     } catch (err) {
       res.status(400).json({ error: 'Failure trying to fetch data' });
