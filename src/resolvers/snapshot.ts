@@ -65,8 +65,11 @@ class SnapshotResolvers {
       const { patientId } = req.params;
       const patientSnapshots: Snapshot[] = await Snapshot.find({ where: { patient: patientId }, relations: ['measurement'] });
       const patientFlags: Flag[] = await Flag.find({ where: { patient: patientId } });
+
       const dates: any = {};
       const lineGraph: any = {};
+      const bulletGraph: any = [];
+
       patientSnapshots.forEach((snap: any) => {
         const { date } = snap;
         const snapshot = {
@@ -80,6 +83,17 @@ class SnapshotResolvers {
             flags: [],
           };
         }
+        const index = bulletGraph.findIndex((el: any) => `${el.date}` === `${date}`);
+        if (index >= 0) {
+          bulletGraph[index].snapshots = [...bulletGraph[index].snapshots, snapshot];
+        }
+        if (index < 0) {
+          bulletGraph.push({
+            snapshots: [snapshot],
+            date,
+          });
+        }
+        // line graphs
         const staticData = {
           measures: [snap.measurement.minValue, snap.measurement.maxValue],
           title: snap.measurement.name,
@@ -122,6 +136,7 @@ class SnapshotResolvers {
       res.status(200).json({
         dates,
         lineGraph,
+        bulletGraph,
       });
     } catch (err) {
       res.status(400).json({ error: 'Failure trying to fetch data' });
