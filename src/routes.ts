@@ -29,12 +29,16 @@ router.get('/verify/:token', ProviderControllers.verify);
 // Patient Routes
 router.post('/patients', authMiddleware, PatientControllers.addPatient);
 router.get('/patients', authMiddleware, PatientControllers.getAllPatients);
+router.get('/patient/:id', authMiddleware, PatientControllers.getPatient);
 
 // Snapshot Routes
 router.get('/snapshots/:patientId', authMiddleware, SnapshotControllers.patientGetAllSnapshots);
 
 // Flag Routes
 router.get('/flags/:patientId', authMiddleware, FlagControllers.patientGetAllFlags);
+
+// Visit Routes
+router.post('/getVisit', authMiddleware, SnapshotControllers.getVisit);
 
 // Hybrid Snapshot and Flag route
 // This will add both snapshots and Flag on a single date:
@@ -67,6 +71,5 @@ router.post('/measurement', MeasurementControllersDev.createMeasurement);
 // USE THE FOLLOWING ROUTE ONLY ONCE TO POPULATE YOUR MEASUREMENTS TABLE!!
 // REMOVE THIS IN PRODUCTION
 router.post('/populateMeasurements', MeasurementControllersDev.populateData);
-router.post('/getVisit', authMiddleware, SnapshotControllers.getVisit);
 
 export default router;

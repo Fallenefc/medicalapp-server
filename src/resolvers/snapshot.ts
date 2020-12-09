@@ -26,7 +26,9 @@ class SnapshotResolvers {
         return singleSnapshot;
       }));
       const flagsArray = await Promise.all(req.body.flags.map(async (flag: Flag) => {
-        const { title, description, type } = flag;
+        const { description, type } = flag;
+        let { title } = flag;
+        if (!title) title = null;
         const singleFlag: Flag = Flag.create({
           date,
           title,
@@ -141,23 +143,13 @@ class SnapshotResolvers {
     try {
       const { patientId, date } = req.body;
       const visitSnapshots: any = await Snapshot.find({ where: { patient: patientId, date }, relations: ['measurement'] });
-      const visitFlags = await Flag.find({ patient: patientId, date });
       const transformedSnapshots = visitSnapshots.map((test: any) => classToPlain(test));
-      const transformedFlags = visitFlags.map((test: any) => classToPlain(test));
 
       const snapshots = transformedSnapshots.map((snap: any) => ({
         name: snap.measurement.name,
         marker: snap.measurementValue,
       }));
-      const flags = transformedFlags.map((flag) => ({
-        title: flag.title,
-        description: flag.description,
-        type: flag.type,
-      }));
-      res.status(200).json({
-        snapshots,
-        flags,
-      });
+      res.status(200).json(snapshots);
     } catch (err) {
       console.error(err);
       res.status(400).json({ error: 'Problem getting visits from a patient' });

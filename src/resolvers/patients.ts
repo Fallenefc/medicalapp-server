@@ -54,6 +54,17 @@ class PatientResolvers {
       return res.status(400).json({ error: 'Something is wrong getting all patients' });
     }
   }
+
+  async getPatient(req: AuthRequest, res: Response) {
+    try {
+      const { id } = req.params;
+      const patient = await Patient.find({ where: { id } });
+      return res.status(200).json(patient);
+    } catch (err) {
+      console.error(`Something is wrong getting all patients: ${err}`);
+      return res.status(400).json({ error: 'Something is wrong getting a patient' });
+    }
+  }
 }
 
 export default PatientResolvers;

@@ -29,7 +29,7 @@ class Patient extends BaseEntity {
   @Column()
   DoB: Date;
 
-  @Column()
+  @Column({ default: null })
   sex: number;
 
   @Column({ default: null })
